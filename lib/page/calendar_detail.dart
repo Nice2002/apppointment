@@ -40,154 +40,178 @@ class _CalendarDetailState extends State<CalendarDetail> {
                   ],
                   color: Colors.white,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Center(
-                        child: Text(
-                          'รอวันนัดหมาย',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Color.fromARGB(255, 255, 196, 4),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            "assets/images/teacher.png",
-                            height: 100,
-                            width: 97,
+                          const Center(
+                            child: Text(
+                              'รอวันนัดหมาย',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                child: Image.asset(
+                                  "assets/images/teacher1.jpg",
+                                  height: 130,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'อาจารย์อัจฉรา นามบุรี',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.date_range),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'วันที่      :  16 มกราคม 2567',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.access_time_sharp,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'เวลา      :  9.00-12.00 น.',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                '',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.business),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'สถานที่   :  ห้อง 7-317',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                '',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Divider(),
+                          const Row(
+                            children: [
+                              Text(
+                                'เรื่อง: ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                'ส่งรายงานความก้าวหน้าโครงงาน',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Divider(),
+                          const Row(
+                            children: [
+                              Text(
+                                'รายละเอียด:',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
                           ),
                           const Text(
-                            '     อาจารย์ อัจฉรา นามบุรี',
+                            'ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไว้ที่นี่ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไว้ที่นี่ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไ',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
+                          Divider(),
                         ],
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          // Icon(Icons.calendar_month),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
-                          Text(
-                            '   วันที่        :   15 มกราคม 2567',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          // Text(
-                          //   '   15 มกราคม 2567',
-                          //   style: TextStyle(
-                          //     fontSize: 18,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          // Icon(Icons.watch_later),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
-
-                          Text(
-                            '   เวลา        :   11.00-12.30 น.',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          // Icon(Icons.business),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
-                          Text(
-                            '   สถานที่     :   อาคาร 7 ห้อง 114/2',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'เรื่อง ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'ปรึกษาโครงงานจบการศึกษา',
-                            style: TextStyle(
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Text(
-                        'รายละเอียด',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text(
-                        'นัดหมายเพื่อสอบถามเกี่ยวกับโครงงานจบการศึกษาค่ะ',
-                        style: TextStyle(
-                          fontSize: 18,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

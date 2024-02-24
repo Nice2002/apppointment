@@ -25,10 +25,10 @@ class _CalendarpageState extends State<Calendarpage> {
   }
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   _selectedEvents = ValueNotifier<List<String>>([]);
-  // }
+  void initState() {
+    super.initState();
+    _selectedEvents = ValueNotifier<List<String>>([]);
+  }
 
   @override
   void dispose() {
@@ -169,32 +169,43 @@ class _CalendarpageState extends State<Calendarpage> {
   }
 
   Widget buildAppointmentCard(DateTime date, List<String> appointments) {
-    List<String> teacher = [
+    List<String> teachers = [
       "อาจารย์อัจฉรา นามบุรี",
-      "อาจารย์จารุวัฒน์ ไพลไหล",
+      "อาจารย์สาวิณี แสงสุริยันต์",
       "อาจารย์จักรนรินทร์ คงเจริญ",
     ];
-    String status = "รอนัดหมาย";
-    List<String> date = [
+    List<String> students = [
+      "นายสุเมธ มณีจันทรา",
+      "นายธรรมนูญ เหมือนสิงห์",
+      "นายปิติภัทร มะลิทอง",
+    ];
+    String status = "รอวันนัดหมาย";
+    List<String> appointmentDates = [
       "16 มกราคม 2567",
       "20 กุมภาพันธ์ 2567",
       "3 มีนาคม 2567",
     ];
-    List<String> timestart = [
+    List<String> timeStarts = [
       "9.00",
       "15.00",
       "7.30",
     ];
-    List<String> timeend = [
+    List<String> timeEnds = [
       "12.00",
       "16.00",
       "10.30",
+    ];
+    List<String> images = [
+      "assets/images/teacher1.jpg",
+      "assets/images/teacher2.jpg",
+      "assets/images/teacher3.jpg",
+      "assets/images/std1.jpg",
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        for (final appointment in appointments) ...[
+        for (int i = 0; i < appointments.length; i++) ...[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Padding(
@@ -223,9 +234,14 @@ class _CalendarpageState extends State<Calendarpage> {
                         children: [
                           Row(
                             children: [
-                              Image.asset(
-                                "assets/images/teacher.png",
-                                width: 70,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Image.asset(
+                                  i % 2 == 0
+                                      ? images[i ~/ 2]
+                                      : "assets/images/std${(i ~/ 2) + 1}.jpg",
+                                  width: 60,
+                                ),
                               ),
                               const SizedBox(
                                 width: 15,
@@ -233,19 +249,24 @@ class _CalendarpageState extends State<Calendarpage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    teacher[appointments.indexOf(appointment)],
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    child: Text(
+                                      i % 2 == 0
+                                          ? teachers[i ~/ 2]
+                                          : students[i ~/ 2],
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   SizedBox(
                                     width: 200,
                                     child: Text(
-                                      "วันที่: ${date[appointments.indexOf(appointment)]}",
+                                      "วันที่: ${appointmentDates[i]}",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -255,7 +276,7 @@ class _CalendarpageState extends State<Calendarpage> {
                                   SizedBox(
                                     width: 200,
                                     child: Text(
-                                      "เวลา: ${timestart[appointments.indexOf(appointment)]} - ${timeend[appointments.indexOf(appointment)]} น.",
+                                      "เวลา: ${timeStarts[i]} - ${timeEnds[i]} น.",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -266,7 +287,7 @@ class _CalendarpageState extends State<Calendarpage> {
                                   SizedBox(
                                     width: 200,
                                     child: Text(
-                                      "เรื่อง: $appointment",
+                                      "เรื่อง: ${appointments[i]}",
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -299,7 +320,7 @@ class _CalendarpageState extends State<Calendarpage> {
                               Text(
                                 "$status",
                                 style: const TextStyle(
-                                  color: Color.fromARGB(255, 206, 158, 0),
+                                  color: Colors.blue,
                                   fontSize: 16,
                                 ),
                               ),

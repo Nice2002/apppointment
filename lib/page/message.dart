@@ -56,23 +56,25 @@ class _MessageState extends State<Message> {
                 child: TabBarView(
               children: [
                 buildAppointmentList(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: SizedBox(
-                          width: 300,
-                          child: Image.asset("assets/images/not_app.png")),
-                    ),
-                    const Text(
-                      "ไม่มีคำขอนัดหมาย",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
+                buildAppointmentList2(),
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     // Padding(
+                //     //   padding: EdgeInsets.all(20.0),
+                //     //   child: SizedBox(
+                //     //       width: 300,
+                //     //       child: Image.asset("assets/images/not_app.png")),
+                //     // ),
+                //     // const Text(
+                //     //   "ไม่มีคำขอนัดหมาย",
+                //     //   style:
+                //     //       TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                //     // ),
+
+                //   ],
+                // ),
               ],
             )),
           ],
@@ -90,6 +92,7 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
+              image: 'assets/images/teacher1.jpg',
               date: '18 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
@@ -102,10 +105,11 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
+              image: 'assets/images/teacher2.jpg',
               date: '19 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์อัจฉรา นามบุรี',
+              lecturer: 'อาจารย์จารุวัฒน์ ไพใหล',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -114,9 +118,33 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
+              image: 'assets/images/teacher3.jpg',
               date: '19 มกราคม 2567',
               time: '14.00-15.30 น.',
               topic: 'สรุปโครงการวิจัย',
+              lecturer: 'อาจารย์จิตสราญ สีกู่กา',
+              status: 'รอยืนยัน',
+              index: index,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildAppointmentList2() {
+    return ListView.builder(
+      // shrinkWrap: true,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: buildAppointmentCard(
+              image: 'assets/images/teacher1.jpg',
+              date: '18 มกราคม 2567',
+              time: '11.00-12.30 น.',
+              topic: 'ปรึกษาโครงงานจบการศึกษา',
               lecturer: 'อาจารย์อัจฉรา นามบุรี',
               status: 'รอยืนยัน',
               index: index,
@@ -128,6 +156,7 @@ class _MessageState extends State<Message> {
   }
 
   Widget buildAppointmentCard({
+    required String image,
     required String date,
     required String time,
     required String topic,
@@ -163,7 +192,7 @@ class _MessageState extends State<Message> {
                     children: [
                       ClipRRect(
                         child: Image.asset(
-                          "assets/images/teacher1.jpg",
+                          image,
                           height: 100,
                         ),
                         borderRadius: BorderRadius.circular(7),
