@@ -24,6 +24,7 @@ class _Message_ConfirmState extends State<Message_Confirm> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Container(
+                height: 700,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   // border: Border.all(
@@ -41,252 +42,293 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                   ],
                   color: Colors.white,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            "assets/images/teacher.png",
-                            height: 100,
-                            width: 97,
-                          ),
-                          Text(
-                            '      อาจารย์ อัจฉรา นามบุรี',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '   วันที่       :  15 มกราคม 2567',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          // Text(
-                          //   '   15 มกราคม 2567',
-                          //   style: TextStyle(
-                          //     fontSize: 18,
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '   เวลา       :  11.00-12.30 น.',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '   สถานที่    :  อาคาร 7 ห้อง 114/2',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Row(
-                        children: [
-                          Text(
-                            'เรื่อง ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'ปรึกษาโครงงานจบการศึกษา',
-                            style: TextStyle(
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Text(
-                        'รายละเอียด',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Text(
-                        'นัดหมายเพื่อสอบถามเกี่ยวกับโครงงานจบการศึกษาค่ะ',
-                        style: TextStyle(
-                          fontSize: 18,
-                          // fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Center(
-                        child: Text(
-                          'ต้องการนัดหมายหรือไม่ ?',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Container(
-                          width: 300,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 13, 187, 158),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ChangePassword()));
-                              AwesomeNotifications().createNotification(
-                                content: NotificationContent(
-                                  id: 3,
-                                  channelKey: "basic_channel",
-                                  title: "Notification test",
-                                  body: "Notification test",
-                                  color: Colors.deepPurple,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Image.asset(
+                              //   "assets/images/teacher1.jpg",
+                              //   height: 130,
+                              // ),
+                              ClipRRect(
+                                child: Image.asset(
+                                  "assets/images/teacher1.jpg",
+                                  height: 130,
                                 ),
-                              );
-                            },
-                            child: const Center(
-                              child: Text(
-                                "ยืนยันนัดหมาย",
+                                borderRadius: BorderRadius.circular(10),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Text(
+                              //   'ผู้ขอนัดหมาย',
+                              //   style: TextStyle(
+                              //     fontSize: 18,
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 5,
+                              // ),
+                              Text(
+                                'อาจารย์ อัจฉรา นามบุรี',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                            ],
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.watch_later),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'วันที่      :  15 มกราคม 2567',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              // Text(
+                              //   '   15 มกราคม 2567',
+                              //   style: TextStyle(
+                              //     fontSize: 18,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.business,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'เวลา      :  11.00-12.30 น.',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                '',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Row(
+                            children: [
+                              Icon(Icons.business),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'สถานที่   :  ห้อง 7-317',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              Text(
+                                '',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'เรื่อง ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                'ปรึกษาโครงงานจบการศึกษา',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          const Row(
+                            children: [
+                              Text(
+                                'รายละเอียด',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Text(
+                            'นัดหมายเพื่อสอบถามเกี่ยวกับโครงงานจบการศึกษา ของบทที่ 1 2 3 ค่ะ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            'ต้องการนัดหมายหรือไม่ ?',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: Container(
+                            width: 300,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromARGB(255, 13, 187, 158),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChangePassword()));
+                                // AwesomeNotifications().createNotification(
+                                //   content: NotificationContent(
+                                //     id: 3,
+                                //     channelKey: "basic_channel",
+                                //     title: "Notification test",
+                                //     body: "Notification test",
+                                //     color: Colors.deepPurple,
+                                //   ),
+                                // );
+                              },
+                              child: const Center(
+                                child: Text(
+                                  "ยืนยันนัดหมาย",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Center(
-                        child: Container(
-                          width: 300,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color.fromARGB(255, 255, 217, 4),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ChangePassword()));
-                            },
-                            child: const Center(
-                              child: Text(
-                                "แก้ไขนัดหมาย",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Center(
+                          child: Container(
+                            width: 300,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blue,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChangePassword()));
+                              },
+                              child: const Center(
+                                child: Text(
+                                  "แก้ไขนัดหมาย",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Center(
-                        child: Container(
-                          width: 300,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.red,
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ChangePassword()));
-                            },
-                            child: const Center(
-                              child: Text(
-                                "ปฏิเสธนัดหมาย",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Center(
+                          child: Container(
+                            width: 300,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChangePassword()));
+                              },
+                              child: const Center(
+                                child: Text(
+                                  "ปฏิเสธนัดหมาย",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

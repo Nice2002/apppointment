@@ -1,4 +1,5 @@
 import 'package:apppointment/page/history_detail.dart';
+import 'package:apppointment/widget/donut_profile.dart';
 import 'package:flutter/material.dart';
 
 class Histroy extends StatefulWidget {
@@ -12,23 +13,60 @@ class _HistroyState extends State<Histroy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('ประวัติการนัดหมาย'),
+      appBar: AppBar(
+        title: Text('ประวัติการนัดหมาย'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2.0,
+                      blurRadius: 8.0,
+                      offset: const Offset(0.0, 1.0),
+                    ),
+                  ],
+                ),
+                child: const Column(
+                  children: [
+                    SizedBox(
+                      height: 70,
+                    ),
+                    // Chart(),
+                    DonutProfile(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            buildAppointmentList(),
+          ],
         ),
-        body: Column(children: [
-          SingleChildScrollView(
-            child: buildAppointmentList(),
-          ),
-        ]));
+      ),
+    );
   }
 
   Widget buildAppointmentList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Padding(
+    return SingleChildScrollView(
+      child: Column(
+        children: List.generate(
+          3,
+          (index) => Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
               date: '2 มกราคม 2567',
@@ -38,33 +76,9 @@ class _HistroyState extends State<Histroy> {
               status: 'สำเร็จ',
               index: index,
             ),
-          );
-        } else if (index == 1) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildAppointmentCard(
-              date: '1 มกราคม 2567',
-              time: '09.30-10.30 น.',
-              topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์ สมศักดิ์ ใจดี',
-              status: 'ปฏิเสธ',
-              index: index,
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildAppointmentCard(
-              date: '1 มกราคม 2567',
-              time: '14.00-15.30 น.',
-              topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์ วิทยา ความรู้',
-              status: 'ปฏิเสธ',
-              index: index,
-            ),
-          );
-        }
-      },
+          ),
+        ),
+      ),
     );
   }
 
@@ -145,87 +159,12 @@ class _HistroyState extends State<Histroy> {
                 ],
               ),
               const SizedBox(height: 5),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.only(left: 35),
-              //       child: Text(
-              //         lecturer,
-              //         style: const TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 16,
-              //         ),
-              //       ),
-              //     ),
-              //     Text(
-              //       status,
-              //       style: const TextStyle(
-              //         color: Colors.grey,
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-
-              // Row(
-              //   children: [
-              //     const Padding(
-              //       padding: EdgeInsets.only(left: 35),
-              //       child: Text(
-              //         "เรื่อง ",
-              //         style: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 16,
-              //         ),
-              //       ),
-              //     ),
-              //     Text(
-              //       topic,
-              //       style: const TextStyle(
-              //         color: Colors.black,
-              //         fontSize: 16,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 5),
               const Divider(
                 color: Color.fromARGB(255, 13, 187, 158),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Row(
-                  //   children: [
-                  //     const Icon(
-                  //       Icons.notifications,
-                  //       size: 25,
-                  //       color: const Color.fromARGB(255, 13, 187, 158),
-                  //     ),
-                  //     const SizedBox(width: 10),
-                  //     Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           "เวลา $time",
-                  //           style: const TextStyle(
-                  //             color: Colors.black,
-                  //             fontSize: 16,
-                  //           ),
-                  //         ),
-                  //         Text(
-                  //           "วันที่ $date",
-                  //           style: const TextStyle(
-                  //             color: Colors.black,
-                  //             fontSize: 16,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ],
-                  // ),
                   Row(
                     children: [
                       Text(

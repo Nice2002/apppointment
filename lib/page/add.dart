@@ -2,6 +2,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cr_calendar/cr_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -20,8 +22,6 @@ class _AddState extends State<Add> {
   }
 
   DateTime today = DateTime.now();
-  Map<DateTime, List<String>> _events = {};
-  late final ValueNotifier<List<String>> _selectedEvents;
   String name = 'เลือก';
   String strattime = 'เลือก';
   String fistime = 'เลือก';
@@ -425,16 +425,14 @@ class _AddState extends State<Add> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: const Color.fromARGB(255, 13, 187, 158),
-                  ), // กำหนดสีขอบ
-                  borderRadius: BorderRadius.circular(10.0), // กำหนดรูปร่างขอบ
+                      color: const Color.fromARGB(255, 13, 187, 158)),
+                  borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.1),
                       spreadRadius: 2.0,
                       blurRadius: 5.0,
-                      offset:
-                          const Offset(0.0, 1.0), // changes position of shadow
+                      offset: const Offset(0.0, 1.0),
                     ),
                   ],
                 ),
@@ -443,31 +441,14 @@ class _AddState extends State<Add> {
                     formatButtonVisible: false,
                     titleCentered: true,
                   ),
-                  rowHeight: 40,
+                  rowHeight: 45,
                   availableGestures: AvailableGestures.all,
                   focusedDay: today,
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
-                  selectedDayPredicate: (day) {
-                    final today = DateTime.now();
-                    return !day.isBefore(today) &&
-                        !day.isAfter(today) &&
-                        ![DateTime.saturday, DateTime.sunday]
-                            .contains(day.weekday);
-                  },
+                  selectedDayPredicate: (day) => isSameDay(day, today),
+                  calendarStyle: const CalendarStyle(outsideDaysVisible: false),
                   onDaySelected: _onDaySelected,
-                  calendarStyle: const CalendarStyle(
-                    todayDecoration: BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
-                    ),
-                    weekendTextStyle: TextStyle(
-                      color: Colors.blue,
-                    ),
-                    defaultTextStyle: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(

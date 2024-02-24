@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:apppointment/page/message_confirm.dart';
 
@@ -54,21 +55,23 @@ class _MessageState extends State<Message> {
             Expanded(
                 child: TabBarView(
               children: [
-                SingleChildScrollView(
-                  child: buildAppointmentList(),
-                ),
-                const SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          "ไม่มีคำขอนัดหมาย",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      )
-                    ],
-                  ),
+                buildAppointmentList(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: SizedBox(
+                          width: 300,
+                          child: Image.asset("assets/images/not_app.png")),
+                    ),
+                    const Text(
+                      "ไม่มีคำขอนัดหมาย",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ],
                 ),
               ],
             )),
@@ -80,7 +83,7 @@ class _MessageState extends State<Message> {
 
   Widget buildAppointmentList() {
     return ListView.builder(
-      shrinkWrap: true,
+      // shrinkWrap: true,
       itemCount: 3,
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -90,7 +93,7 @@ class _MessageState extends State<Message> {
               date: '18 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
-              lecturer: 'อาจารย์ อัจฉรา นามบุรี',
+              lecturer: 'อาจารย์อัจฉรา นามบุรี',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -102,7 +105,7 @@ class _MessageState extends State<Message> {
               date: '19 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์ สมศักดิ์ ใจดี',
+              lecturer: 'อาจารย์อัจฉรา นามบุรี',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -114,7 +117,7 @@ class _MessageState extends State<Message> {
               date: '19 มกราคม 2567',
               time: '14.00-15.30 น.',
               topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์ วิทยา ความรู้',
+              lecturer: 'อาจารย์อัจฉรา นามบุรี',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -158,12 +161,14 @@ class _MessageState extends State<Message> {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "assets/images/teacher.png",
-                        height: 60,
-                        width: 60,
+                      ClipRRect(
+                        child: Image.asset(
+                          "assets/images/teacher1.jpg",
+                          height: 100,
+                        ),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Column(
@@ -171,7 +176,7 @@ class _MessageState extends State<Message> {
                         children: [
                           Text(
                             lecturer,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -179,18 +184,26 @@ class _MessageState extends State<Message> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            "$date | $time",
+                            "วันที่: $date",
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            "เรื่อง $topic",
-                            style: TextStyle(
+                            "เวลา: $time",
+                            style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            "เรื่อง: $topic",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -201,100 +214,25 @@ class _MessageState extends State<Message> {
                 ],
               ),
               const SizedBox(height: 5),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Padding(
-              //       padding: const EdgeInsets.only(left: 35),
-              //       child: Text(
-              //         lecturer,
-              //         style: const TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 16,
-              //         ),
-              //       ),
-              //     ),
-              //     Text(
-              //       status,
-              //       style: const TextStyle(
-              //         color: Colors.grey,
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-
-              // Row(
-              //   children: [
-              //     const Padding(
-              //       padding: EdgeInsets.only(left: 35),
-              //       child: Text(
-              //         "เรื่อง ",
-              //         style: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 16,
-              //         ),
-              //       ),
-              //     ),
-              //     Text(
-              //       topic,
-              //       style: const TextStyle(
-              //         color: Colors.black,
-              //         fontSize: 16,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 5),
               const Divider(
                 color: Color.fromARGB(255, 13, 187, 158),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Row(
-                  //   children: [
-                  //     const Icon(
-                  //       Icons.notifications,
-                  //       size: 25,
-                  //       color: const Color.fromARGB(255, 13, 187, 158),
-                  //     ),
-                  //     const SizedBox(width: 10),
-                  //     Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           "เวลา $time",
-                  //           style: const TextStyle(
-                  //             color: Colors.black,
-                  //             fontSize: 16,
-                  //           ),
-                  //         ),
-                  //         Text(
-                  //           "วันที่ $date",
-                  //           style: const TextStyle(
-                  //             color: Colors.black,
-                  //             fontSize: 16,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ],
-                  // ),
                   Row(
                     children: [
-                      Text(
-                        "สถานะ ",
-                        style: const TextStyle(
+                      const Text(
+                        "สถานะ: ",
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                         ),
                       ),
                       Text(
-                        "$status",
+                        status,
                         style: const TextStyle(
-                          color: Colors.grey,
+                          color: Color.fromARGB(255, 116, 116, 116),
                           fontSize: 16,
                         ),
                       ),
@@ -331,7 +269,7 @@ class _MessageState extends State<Message> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

@@ -100,9 +100,48 @@ class _LoginState extends State<Login> {
               const SizedBox(
                 height: 5,
               ),
-
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Container(
+                  height: 55,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 13, 187, 158),
+                    ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1.0,
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 1.0),
+                      ),
+                    ],
+                  ),
+                  child: Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: InputDecorationTheme(
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'กรอกรหัสผ่าน',
+                          hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: GoogleFonts.prompt().fontFamily,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(
-                height: 5,
+                height: 10,
               ),
               Center(
                 child: Padding(

@@ -386,48 +386,43 @@ class _ProfileState extends State<Profile> {
                       color: const Color.fromARGB(255, 13, 187, 158),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DashboardProfile()),
-                      );
-                    },
-                    child: Container(
-                      width: 350,
-                      height: 40,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Row(
-                          children: [
-                            Icon(Icons.dashboard),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              "รายงานการนัดหมายของฉัน",
-                              style: TextStyle(
-                                fontSize: 16,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Spacer(), // หรือ Expanded()
-                            Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 10, left: 10),
-                    child: Divider(
-                      color: const Color.fromARGB(255, 13, 187, 158),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const DashboardProfile()),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //     width: 350,
+                  //     height: 40,
+                  //     child: const Padding(
+                  //       padding: EdgeInsets.only(left: 20),
+                  //       child: Row(
+                  //         children: [
+                  //           Icon(Icons.dashboard),
+                  //           SizedBox(
+                  //             width: 20,
+                  //           ),
+                  //           Text(
+                  //             "รายงานการนัดหมายของฉัน",
+                  //             style: TextStyle(
+                  //               fontSize: 16,
+                  //               // fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //           Spacer(), // หรือ Expanded()
+                  //           Icon(
+                  //             Icons.arrow_forward_ios_rounded,
+                  //             size: 20,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
                   InkWell(
                     onTap: () {
                       Navigator.push(
