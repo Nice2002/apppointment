@@ -1,8 +1,6 @@
 import 'package:apppointment/page/addTimeOpenClose.dart';
 import 'package:apppointment/page/changepassword.dart';
-import 'package:apppointment/page/convenient.dart';
 import 'package:apppointment/page/profile_dashboard.dart';
-import 'package:apppointment/page/profile_edit.dart';
 import 'package:apppointment/page/history.dart';
 import 'package:apppointment/page/login.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +46,27 @@ class _ProfileState extends State<Profile> {
               const SizedBox(
                 height: 20,
               ),
-              Image.asset(
-                "assets/images/student.png",
+              Container(
+                width: 100,
                 height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Color.fromARGB(255, 226, 226, 226),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Color.fromARGB(255, 170, 170, 170),
+                  //     blurRadius: 10,
+                  //     offset: Offset(0, 5),
+                  //   )
+                  // ]
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset("assets/images/std2.jpg"),
+                ),
               ),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 5, left: 20),
@@ -79,7 +92,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "ชื่อ",
+                                "ชื่อ:",
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -127,7 +140,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "อีเมล",
+                                "อีเมล:",
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -175,7 +188,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "รหัสนิสิต",
+                                "รหัสนิสิต:",
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -223,7 +236,7 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "หลักสูตร",
+                                "หลักสูตร:",
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -386,43 +399,6 @@ class _ProfileState extends State<Profile> {
                       color: const Color.fromARGB(255, 13, 187, 158),
                     ),
                   ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const DashboardProfile()),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     width: 350,
-                  //     height: 40,
-                  //     child: const Padding(
-                  //       padding: EdgeInsets.only(left: 20),
-                  //       child: Row(
-                  //         children: [
-                  //           Icon(Icons.dashboard),
-                  //           SizedBox(
-                  //             width: 20,
-                  //           ),
-                  //           Text(
-                  //             "รายงานการนัดหมายของฉัน",
-                  //             style: TextStyle(
-                  //               fontSize: 16,
-                  //               // fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //           Spacer(), // หรือ Expanded()
-                  //           Icon(
-                  //             Icons.arrow_forward_ios_rounded,
-                  //             size: 20,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
                   InkWell(
                     onTap: () {
                       Navigator.push(

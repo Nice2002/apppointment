@@ -13,20 +13,16 @@ class Calendarpage extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CalendarpageState extends State<Calendarpage> {
-  DateTime today = DateTime.now();
+  late DateTime today;
+  late DateTime selectedFutureDay; // เพิ่มตัวแปรนี้
   Map<DateTime, List<String>> _events = {};
   late final ValueNotifier<List<String>> _selectedEvents;
-  // CalendarFormat _calendarFormat = CalendarFormat.month;
-  // RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  void _onDaySelected(DateTime day, DateTime focusedDay) {
-    setState(() {
-      today = day;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
+    today = DateTime.now();
+    selectedFutureDay = today; // กำหนดค่าเริ่มต้นเป็นวันปัจจุบัน
     _selectedEvents = ValueNotifier<List<String>>([]);
   }
 
@@ -40,22 +36,23 @@ class _CalendarpageState extends State<Calendarpage> {
     return _events[day] ?? [];
   }
 
-  // List<String> _getEventsForRange(DateTime start, DateTime end) {
-  //   final days = daysInRange(start, end);
-  //   return [
-  //     for (final d in days) ..._getEventsForDay(d),
-  //   ];
-  // }
+  bool _isWeekend(DateTime day) {
+    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+  }
 
-  // List<DateTime> daysInRange(DateTime start, DateTime end) {
-  //   final List<DateTime> days = [];
+  bool _isWithin3Days(DateTime day) {
+    final diffToToday = day.difference(today).inDays;
+    return diffToToday >= 0 && diffToToday <= 3;
+  }
 
-  //   for (int i = 0; i <= end.difference(start).inDays; i++) {
-  //     days.add(start.add(Duration(days: i)));
-  //   }
-
-  //   return days;
-  // }
+  void _onDaySelected(DateTime day, DateTime focusedDay) {
+    setState(() {
+      if (!_isWithin3Days(day)) {
+        return;
+      }
+      today = day;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +123,8 @@ class _CalendarpageState extends State<Calendarpage> {
                   calendarStyle: const CalendarStyle(outsideDaysVisible: false),
                   eventLoader: _getEventsForDay,
                   onDaySelected: _onDaySelected,
+                  enabledDayPredicate: (day) =>
+                      !_isWeekend(day) && _isWithin3Days(day),
                 ),
               ),
             ),
@@ -171,7 +170,7 @@ class _CalendarpageState extends State<Calendarpage> {
   Widget buildAppointmentCard(DateTime date, List<String> appointments) {
     List<String> teachers = [
       "อาจารย์อัจฉรา นามบุรี",
-      "อาจารย์สาวิณี แสงสุริยันต์",
+      "อาจารย์จารุวัฒน์ ไพใหล",
       "อาจารย์จักรนรินทร์ คงเจริญ",
     ];
     List<String> students = [
@@ -179,7 +178,7 @@ class _CalendarpageState extends State<Calendarpage> {
       "นายธรรมนูญ เหมือนสิงห์",
       "นายปิติภัทร มะลิทอง",
     ];
-    String status = "รอวันนัดหมาย";
+    String status = "รอนัดหมาย";
     List<String> appointmentDates = [
       "16 มกราคม 2567",
       "20 กุมภาพันธ์ 2567",
@@ -311,7 +310,7 @@ class _CalendarpageState extends State<Calendarpage> {
                           Row(
                             children: [
                               const Text(
-                                "สถานะ ",
+                                "สถานะ: ",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -320,8 +319,9 @@ class _CalendarpageState extends State<Calendarpage> {
                               Text(
                                 "$status",
                                 style: const TextStyle(
-                                  color: Colors.blue,
+                                  color: Color.fromARGB(255, 255, 153, 0),
                                   fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -349,8 +349,8 @@ class _CalendarpageState extends State<Calendarpage> {
                                 child: Text(
                                   "ข้อมูลเพิ่มเติม",
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
                                     color: Color.fromARGB(255, 13, 187, 158),
                                   ),
                                 ),

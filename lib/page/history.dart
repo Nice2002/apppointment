@@ -1,6 +1,7 @@
 import 'package:apppointment/page/history_detail.dart';
 import 'package:apppointment/widget/donut_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Histroy extends StatefulWidget {
   const Histroy({super.key});
@@ -23,7 +24,7 @@ class _HistroyState extends State<Histroy> {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -51,9 +52,6 @@ class _HistroyState extends State<Histroy> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
             buildAppointmentList(),
           ],
         ),
@@ -62,23 +60,52 @@ class _HistroyState extends State<Histroy> {
   }
 
   Widget buildAppointmentList() {
-    return SingleChildScrollView(
-      child: Column(
-        children: List.generate(
-          3,
-          (index) => Padding(
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
               date: '2 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
               lecturer: 'อาจารย์ อัจฉรา นามบุรี',
+              images: 'assets/images/teacher1.jpg',
               status: 'สำเร็จ',
               index: index,
             ),
-          ),
-        ),
-      ),
+          );
+        } else if (index == 1) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: buildAppointmentCard(
+              date: '1 มกราคม 2567',
+              time: '09.30-10.30 น.',
+              topic: 'ประเมินผลการทดลอง',
+              lecturer: 'อาจารย์ จารุวัฒน์ ไพใหล',
+              images: 'assets/images/teacher2.jpg',
+              status: 'ปฏิเสธ',
+              index: index,
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: buildAppointmentCard(
+              date: '1 มกราคม 2567',
+              time: '14.00-15.30 น.',
+              topic: 'สรุปโครงการวิจัย',
+              lecturer: 'อาจารย์ จักรนรินทร์ คงเจริญ',
+              images: 'assets/images/teacher3.jpg',
+              status: 'ปฏิเสธ',
+              index: index,
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -89,9 +116,10 @@ class _HistroyState extends State<Histroy> {
     required String lecturer,
     required String status,
     required int index,
+    required String images,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -116,12 +144,14 @@ class _HistroyState extends State<Histroy> {
                 children: [
                   Row(
                     children: [
-                      Image.asset(
-                        "assets/images/teacher.png",
-                        height: 60,
-                        width: 60,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.asset(
+                          images,
+                          width: 60,
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Column(
@@ -129,7 +159,7 @@ class _HistroyState extends State<Histroy> {
                         children: [
                           Text(
                             lecturer,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -137,18 +167,26 @@ class _HistroyState extends State<Histroy> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            "$date | $time",
+                            "วันที่: $date",
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            "เรื่อง $topic",
-                            style: TextStyle(
+                            "เวลา: $time",
+                            style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            "เรื่อง: $topic",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -167,9 +205,9 @@ class _HistroyState extends State<Histroy> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "สถานะ ",
-                        style: const TextStyle(
+                      const Text(
+                        "สถานะ: ",
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                         ),
@@ -206,8 +244,8 @@ class _HistroyState extends State<Histroy> {
                         child: Text(
                           "ข้อมูลเพิ่มเติม",
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                             color: Color.fromARGB(255, 13, 187, 158),
                           ),
                         ),
@@ -215,7 +253,7 @@ class _HistroyState extends State<Histroy> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

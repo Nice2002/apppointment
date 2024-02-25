@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:apppointment/page/message_confirm.dart';
 
@@ -56,25 +55,23 @@ class _MessageState extends State<Message> {
                 child: TabBarView(
               children: [
                 buildAppointmentList(),
-                buildAppointmentList2(),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   children: [
-                //     // Padding(
-                //     //   padding: EdgeInsets.all(20.0),
-                //     //   child: SizedBox(
-                //     //       width: 300,
-                //     //       child: Image.asset("assets/images/not_app.png")),
-                //     // ),
-                //     // const Text(
-                //     //   "ไม่มีคำขอนัดหมาย",
-                //     //   style:
-                //     //       TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                //     // ),
-
-                //   ],
-                // ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: SizedBox(
+                          width: 300,
+                          child: Image.asset("assets/images/not_app.png")),
+                    ),
+                    const Text(
+                      "ไม่มีคำขอนัดหมาย",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
               ],
             )),
           ],
@@ -92,11 +89,11 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
-              image: 'assets/images/teacher1.jpg',
               date: '18 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
               lecturer: 'อาจารย์อัจฉรา นามบุรี',
+              images: 'assets/images/teacher1.jpg',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -105,11 +102,11 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
-              image: 'assets/images/teacher2.jpg',
               date: '19 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
               lecturer: 'อาจารย์จารุวัฒน์ ไพใหล',
+              images: 'assets/images/teacher2.jpg',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -118,34 +115,11 @@ class _MessageState extends State<Message> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: buildAppointmentCard(
-              image: 'assets/images/teacher3.jpg',
               date: '19 มกราคม 2567',
               time: '14.00-15.30 น.',
               topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์จิตสราญ สีกู่กา',
-              status: 'รอยืนยัน',
-              index: index,
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget buildAppointmentList2() {
-    return ListView.builder(
-      // shrinkWrap: true,
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildAppointmentCard(
-              image: 'assets/images/teacher1.jpg',
-              date: '18 มกราคม 2567',
-              time: '11.00-12.30 น.',
-              topic: 'ปรึกษาโครงงานจบการศึกษา',
-              lecturer: 'อาจารย์อัจฉรา นามบุรี',
+              lecturer: 'อาจารย์จักรนรินทร์ คงเจริญ',
+              images: 'assets/images/teacher3.jpg',
               status: 'รอยืนยัน',
               index: index,
             ),
@@ -156,13 +130,13 @@ class _MessageState extends State<Message> {
   }
 
   Widget buildAppointmentCard({
-    required String image,
     required String date,
     required String time,
     required String topic,
     required String lecturer,
     required String status,
     required int index,
+    required String images,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -191,11 +165,11 @@ class _MessageState extends State<Message> {
                   Row(
                     children: [
                       ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
                         child: Image.asset(
-                          image,
-                          height: 100,
+                          images,
+                          width: 60,
                         ),
-                        borderRadius: BorderRadius.circular(7),
                       ),
                       const SizedBox(
                         width: 15,
@@ -289,8 +263,8 @@ class _MessageState extends State<Message> {
                         child: Text(
                           "ข้อมูลเพิ่มเติม",
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                             color: Color.fromARGB(255, 13, 187, 158),
                           ),
                         ),

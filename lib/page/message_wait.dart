@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HistoryDetail extends StatefulWidget {
-  const HistoryDetail({super.key});
+class Message_Wait extends StatefulWidget {
+  const Message_Wait({super.key});
 
   @override
-  State<HistoryDetail> createState() => _HistoryDetailState();
+  State<Message_Wait> createState() => _Message_WaitState();
 }
 
-class _HistoryDetailState extends State<HistoryDetail> {
+class _Message_WaitState extends State<Message_Wait> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +53,10 @@ class _HistoryDetailState extends State<HistoryDetail> {
                         children: [
                           const Center(
                             child: Text(
-                              'นัดหมายสำเร็จ',
+                              'รอยืนยันนัดหมาย',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Color.fromARGB(255, 13, 187, 158),
+                                color: Colors.grey,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -101,7 +101,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                 width: 10,
                               ),
                               Text(
-                                'วันที่      :  2 มกราคม 2567',
+                                'วันที่      :  16 มกราคม 2567',
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),
@@ -121,7 +121,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                 width: 10,
                               ),
                               Text(
-                                'เวลา      :  11.00-12.30 น.',
+                                'เวลา      :  9.00-12.00 น.',
                                 style: TextStyle(
                                   fontSize: 18,
                                 ),

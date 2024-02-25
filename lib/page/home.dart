@@ -1,3 +1,4 @@
+import 'package:apppointment/page/notification.dart';
 import 'package:apppointment/widget/donut2.dart';
 import 'package:flutter/material.dart';
 
@@ -52,9 +53,24 @@ class _HomepageState extends State<Homepage> {
                     child: Row(
                       children: [
                         const SizedBox(),
-                        SizedBox(
-                          width: 60,
-                          child: Image.asset("assets/images/student.png"),
+                        Container(
+                          width: 50,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.black,
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     color: Color.fromARGB(255, 170, 170, 170),
+                            //     blurRadius: 10,
+                            //     offset: Offset(0, 5),
+                            //   )
+                            // ]
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.asset("assets/images/std2.jpg"),
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
@@ -72,48 +88,69 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                             SizedBox(
-                              height: 3,
-                            ),
-                            SizedBox(
                               width: 200,
                               child: Text(
                                 "นิสิตหลักสูตรวิทยาการคอมพิวเตอร์และสารสนเทศ",
                                 style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w500),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 156, 156, 156)),
                               ),
                             ),
                           ],
                         ),
-                        Icon(
-                          Icons.notifications,
-                          size: 30,
-                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Notificationpage(),
+                              ),
+                            );
+                          },
+                          child: Icon(
+                            Icons.notifications,
+                            size: 30,
+                          ),
+                        )
                       ],
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(left: 20, top: 10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "รายงานจำนวนการนัดหมาย",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 94, 170),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: Image.asset("assets/images/pie-chart.png"),
                         ),
-                      ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "รายงานจำนวนการนัดหมาย",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 94, 170),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Divider(),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "ประจำเดือนมกราคม ปี 2567",
+                        "ประจำเดือนมกราคม พ.ศ.2567",
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
@@ -130,13 +167,13 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 60,
+                          height: 80,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: const Color.fromARGB(255, 13, 187, 158),
-                              width: 2,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              width: 4,
                             ),
-                            color: Colors.white,
+                            color: Color.fromARGB(255, 0, 206, 171),
                             borderRadius: BorderRadius.circular(10.0),
                             boxShadow: [
                               BoxShadow(
@@ -156,15 +193,20 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Text(
                                     'จำนวนการนัดหมายสำเร็จ',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                   Text(
                                     ' 2 ',
-                                    style: TextStyle(fontSize: 24),
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     'ครั้ง',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -178,13 +220,13 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 60,
+                          height: 80,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.blue,
-                              width: 2,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              width: 4,
                             ),
-                            color: Colors.white,
+                            color: Colors.blue,
                             borderRadius: BorderRadius.circular(10.0),
                             boxShadow: [
                               BoxShadow(
@@ -204,15 +246,20 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Text(
                                     'จำนวนการรอนัดหมาย',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                   Text(
                                     ' 5 ',
-                                    style: TextStyle(fontSize: 24),
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     'ครั้ง',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -226,13 +273,13 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Container(
-                          height: 60,
+                          height: 80,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.red,
-                              width: 2,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              width: 4,
                             ),
-                            color: Colors.white,
+                            color: const Color.fromARGB(255, 187, 29, 18),
                             borderRadius: BorderRadius.circular(10.0),
                             boxShadow: [
                               BoxShadow(
@@ -252,15 +299,20 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Text(
                                     'จำนวนการปฏิเสธนัดหมาย',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                   Text(
                                     ' 4 ',
-                                    style: TextStyle(fontSize: 24),
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     'ครั้ง',
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -321,7 +373,7 @@ class _HomepageState extends State<Homepage> {
                         ],
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             )

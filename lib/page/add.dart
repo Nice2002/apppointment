@@ -21,6 +21,10 @@ class _AddState extends State<Add> {
     });
   }
 
+  bool _isWeekend(DateTime day) {
+    return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+  }
+
   DateTime today = DateTime.now();
   String name = 'เลือก';
   String strattime = 'เลือก';
@@ -449,6 +453,7 @@ class _AddState extends State<Add> {
                   selectedDayPredicate: (day) => isSameDay(day, today),
                   calendarStyle: const CalendarStyle(outsideDaysVisible: false),
                   onDaySelected: _onDaySelected,
+                  enabledDayPredicate: (day) => !_isWeekend(day),
                 ),
               ),
               const SizedBox(
