@@ -1,4 +1,4 @@
-import 'package:apppointment/page/calendar_detail.dart';
+import 'package:apppointment/page-2/calendar_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -59,7 +59,7 @@ class _CalendarpageState extends State<Calendarpage> {
     _events = {
       DateTime.utc(2024, 1, 15): [
         'ปรึกษาโครงงานจบการศึกษา',
-        'นัดหมายพูดคุยรายละเอียดโครงงาน'
+        'Homeroom ภาควิชา',
       ],
       // DateTime.utc(2024, 1, 16): ['นัดหมายพูดคุยรายละเอียดโครงงาน'],
     };
@@ -242,18 +242,18 @@ class _CalendarpageState extends State<Calendarpage> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
                                   color: Color.fromARGB(255, 238, 237, 237),
-                                  // boxShadow: [
-                                  //   BoxShadow(
-                                  //     color: Color.fromARGB(255, 170, 170, 170),
-                                  //     blurRadius: 10,
-                                  //     offset: Offset(0, 5),
-                                  //   )
-                                  // ]
+                                  //   // boxShadow: [
+                                  //   //   BoxShadow(
+                                  //   //     color: Color.fromARGB(255, 170, 170, 170),
+                                  //   //     blurRadius: 10,
+                                  //   //     offset: Offset(0, 5),
+                                  //   //   )
+                                  //   // ]
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: Image.asset(
-                                    images[i ~/ 2],
+                                    "assets/images/std${(i ~/ 1) + 1}.jpg",
                                   ),
                                 ),
                               ),
@@ -267,7 +267,7 @@ class _CalendarpageState extends State<Calendarpage> {
                                   children: [
                                     SizedBox(
                                       child: Text(
-                                        teachers[i ~/ 2],
+                                        students[i ~/ 1],
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 16,

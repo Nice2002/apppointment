@@ -1,8 +1,8 @@
 import 'package:apppointment/notification_controller.dart';
-import 'package:apppointment/page/calendarpage.dart';
-import 'package:apppointment/page/home.dart';
-import 'package:apppointment/page/index.dart';
-import 'package:apppointment/page/login.dart';
+import 'package:apppointment/page-2/calendarpage.dart';
+import 'package:apppointment/page-2/home.dart';
+import 'package:apppointment/page-2/index.dart';
+import 'package:apppointment/page-2/login.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

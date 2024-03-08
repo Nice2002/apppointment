@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CalendarDetail extends StatefulWidget {
-  const CalendarDetail({Key? key}) : super(key: key);
+class Message_Wait extends StatefulWidget {
+  const Message_Wait({super.key});
 
   @override
-  State<CalendarDetail> createState() => _CalendarDetailState();
+  State<Message_Wait> createState() => _Message_WaitState();
 }
 
-class _CalendarDetailState extends State<CalendarDetail> {
+class _Message_WaitState extends State<Message_Wait> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +22,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                 height: 10,
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -55,10 +54,10 @@ class _CalendarDetailState extends State<CalendarDetail> {
                           children: [
                             const Center(
                               child: Text(
-                                'รอวันนัดหมาย',
+                                'รอยืนยันนัดหมาย',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.blue,
+                                  color: Colors.grey,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -71,7 +70,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 ClipRRect(
                                   child: Image.asset(
-                                    "assets/images/teacher1.jpg",
+                                    "assets/images/std2.jpg",
                                     height: 130,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
@@ -85,10 +84,16 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'อาจารย์อัจฉรา นามบุรี',
+                                  'นายธรรมนูญ เหมือนสิงห์',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'หลักสูตรสาขาวิชาวิทยาการคอมพิวเตอร์',
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
                                 SizedBox(
@@ -103,7 +108,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'วันที่      :  16 มกราคม 2567',
+                                  'วันที่      :  20 มกราคม 2567',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -203,35 +208,20 @@ class _CalendarDetailState extends State<CalendarDetail> {
                             SizedBox(
                               height: 5,
                             ),
-                            SizedBox(
-                              width: 320,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'ปรึกษาโครงงานจบการศึกษาภาควิชาวิทยาการคอมพิวเตอร์และสารสนเทศ ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                            const Text(
+                              'ปรึกษาโครงงานจบการศึกษาภาควิชาวิทยาการคอมพิวเตอร์และสารสนเทศ',
+                              style: TextStyle(
+                                fontSize: 16,
                               ),
                             ),
                             Divider(),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
                               children: [
                                 const Text(
-                                  'ระดับความสำคัญ: ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'ปกติ',
+                                  'ระดับความสำคัญ: ปกติ',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -240,7 +230,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               ],
                             ),
                             Divider(),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -258,7 +248,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 Icon(Icons.email),
                                 const Text(
-                                  ' : adchara.n@live.ku.th',
+                                  ' : tammanoon.m@ku.th',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -317,6 +307,56 @@ class _CalendarDetailState extends State<CalendarDetail> {
                             //   ],
                             // ),
                             Divider(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Container(
+                                width: 300,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue,
+                                ),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: const Center(
+                                    child: Text(
+                                      "แก้ไขนัดหมาย",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Center(
+                              child: Container(
+                                width: 300,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red,
+                                ),
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: const Center(
+                                    child: Text(
+                                      "ลบนัดหมาย",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),

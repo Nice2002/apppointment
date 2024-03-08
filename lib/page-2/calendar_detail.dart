@@ -71,7 +71,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 ClipRRect(
                                   child: Image.asset(
-                                    "assets/images/teacher1.jpg",
+                                    "assets/images/std2.jpg",
                                     height: 130,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
@@ -85,10 +85,16 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'อาจารย์อัจฉรา นามบุรี',
+                                  'นายธรรมนูญ เหมือนสิงห์',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'หลักสูตรสาขาวิชาวิทยาการคอมพิวเตอร์',
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
                                 SizedBox(
@@ -103,7 +109,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'วันที่      :  16 มกราคม 2567',
+                                  'วันที่      :  20 มกราคม 2567',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -123,7 +129,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'เวลา      :  9.00-12.00 น.',
+                                  'เวลา      :  15.00-16.00 น.',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -177,7 +183,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                             Row(
                               children: [
                                 const Text(
-                                  'ปรึกษาโครงงานจบการศึกษา',
+                                  'Homeroom ภาควิชา',
                                   style: TextStyle(
                                     fontSize: 16,
                                     // fontWeight: FontWeight.bold,
@@ -231,7 +237,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   ),
                                 ),
                                 const Text(
-                                  'ปกติ',
+                                  'เร่งด่วน',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -258,7 +264,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 Icon(Icons.email),
                                 const Text(
-                                  ' : adchara.n@live.ku.th',
+                                  ' : tammanoon.m@.ku.th',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),

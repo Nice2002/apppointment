@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CalendarDetail extends StatefulWidget {
-  const CalendarDetail({Key? key}) : super(key: key);
+class HistoryDetail extends StatefulWidget {
+  const HistoryDetail({super.key});
 
   @override
-  State<CalendarDetail> createState() => _CalendarDetailState();
+  State<HistoryDetail> createState() => _HistoryDetailState();
 }
 
-class _CalendarDetailState extends State<CalendarDetail> {
+class _HistoryDetailState extends State<HistoryDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +22,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                 height: 10,
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -55,10 +54,10 @@ class _CalendarDetailState extends State<CalendarDetail> {
                           children: [
                             const Center(
                               child: Text(
-                                'รอวันนัดหมาย',
+                                'นัดหมายสำเร็จ',
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.blue,
+                                  color: Color.fromARGB(255, 13, 187, 158),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -71,7 +70,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 ClipRRect(
                                   child: Image.asset(
-                                    "assets/images/teacher1.jpg",
+                                    "assets/images/std2.jpg",
                                     height: 130,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
@@ -85,10 +84,16 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'อาจารย์อัจฉรา นามบุรี',
+                                  'นายธรรมนูญ เหมือนสิงห์',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'หลักสูตรสาขาวิชาวิทยาการคอมพิวเตอร์',
+                                  style: TextStyle(
+                                    fontSize: 16,
                                   ),
                                 ),
                                 SizedBox(
@@ -103,7 +108,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'วันที่      :  16 มกราคม 2567',
+                                  'วันที่      :  2 มกราคม 2567',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -123,7 +128,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'เวลา      :  9.00-12.00 น.',
+                                  'เวลา      :  11.00-12.30 น.',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -146,7 +151,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'สถานที่   :  ห้องพัก 7-317/1',
+                                  'สถานที่   :  ห้อง 7-317',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -203,18 +208,10 @@ class _CalendarDetailState extends State<CalendarDetail> {
                             SizedBox(
                               height: 5,
                             ),
-                            SizedBox(
-                              width: 320,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'ปรึกษาโครงงานจบการศึกษาภาควิชาวิทยาการคอมพิวเตอร์และสารสนเทศ ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                            const Text(
+                              'ปรึกษาโครงงานจบการศึกษาภาควิชาวิทยาการคอมพิวเตอร์และสารสนเทศ',
+                              style: TextStyle(
+                                fontSize: 16,
                               ),
                             ),
                             Divider(),
@@ -224,14 +221,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                             Row(
                               children: [
                                 const Text(
-                                  'ระดับความสำคัญ: ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'ปกติ',
+                                  'ระดับความสำคัญ: ปกติ',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -258,7 +248,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
                               children: [
                                 Icon(Icons.email),
                                 const Text(
-                                  ' : adchara.n@live.ku.th',
+                                  ' : tammanoon.m@ku.th',
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),

@@ -1,10 +1,9 @@
-import 'package:apppointment/page/addTimeOpenClose.dart';
-import 'package:apppointment/page/changepassword.dart';
-import 'package:apppointment/page/contact.dart';
-import 'package:apppointment/page/dialog_edit_profile.dart';
-import 'package:apppointment/page/profile_dashboard.dart';
-import 'package:apppointment/page/history.dart';
-import 'package:apppointment/page/login.dart';
+import 'package:apppointment/page-2/addTimeOpenClose.dart';
+import 'package:apppointment/page-2/changepassword.dart';
+import 'package:apppointment/page-2/contact.dart';
+import 'package:apppointment/page-2/dialog_edit_profile.dart';
+import 'package:apppointment/page-2/history.dart';
+import 'package:apppointment/page-2/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -60,7 +59,7 @@ class _ProfileState extends State<Profile> {
                       height: 100,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
-                        color: Color.fromARGB(255, 226, 226, 226),
+                        color: Color.fromARGB(255, 238, 237, 237),
                         // boxShadow: [
                         //   BoxShadow(
                         //     color: Color.fromARGB(255, 170, 170, 170),
@@ -72,7 +71,7 @@ class _ProfileState extends State<Profile> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Image.asset(
-                          "assets/images/std2.jpg",
+                          "assets/images/teacher1.jpg",
                         ),
                       ),
                     ),
@@ -125,7 +124,7 @@ class _ProfileState extends State<Profile> {
                                 child: const Row(
                                   children: [
                                     Text(
-                                      "ธรรมนูญ เหมือนสิงห์",
+                                      "อัจฉรา นามบุรี",
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -173,7 +172,7 @@ class _ProfileState extends State<Profile> {
                                 child: const Row(
                                   children: [
                                     Text(
-                                      "tammanoon.m@ku.th",
+                                      "adchara.n@live.ku.th",
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -187,150 +186,150 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color.fromARGB(255, 13, 187, 158),
-                          ),
-                          child: const Icon(
-                            Icons.assignment_ind,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "รหัสนิสิต:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                height: 30,
-                                width: 250,
-                                child: const Row(
-                                  children: [
-                                    Text(
-                                      "6440201793",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color.fromARGB(255, 13, 187, 158),
-                          ),
-                          child: const Icon(
-                            Icons.branding_watermark,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "หลักสูตร:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                height: 30,
-                                width: 250,
-                                child: const Row(
-                                  children: [
-                                    Text(
-                                      "วิทยาการคอมพิวเตออร์",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: const Color.fromARGB(255, 13, 187, 158),
-                          ),
-                          child: const Icon(
-                            Icons.menu_book,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "ชั้นปี:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                height: 30,
-                                width: 250,
-                                child: const Row(
-                                  children: [
-                                    Text(
-                                      "3",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       height: 50,
+                    //       width: 50,
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(25),
+                    //         color: const Color.fromARGB(255, 13, 187, 158),
+                    //       ),
+                    //       child: const Icon(
+                    //         Icons.assignment_ind,
+                    //         color: Colors.white,
+                    //       ),
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.only(left: 20),
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           const Text(
+                    //             "รหัสนิสิต:",
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //             ),
+                    //           ),
+                    //           Container(
+                    //             height: 30,
+                    //             width: 250,
+                    //             child: const Row(
+                    //               children: [
+                    //                 Text(
+                    //                   "6440201793",
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     fontWeight: FontWeight.bold,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       height: 50,
+                    //       width: 50,
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(25),
+                    //         color: const Color.fromARGB(255, 13, 187, 158),
+                    //       ),
+                    //       child: const Icon(
+                    //         Icons.branding_watermark,
+                    //         color: Colors.white,
+                    //       ),
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.only(left: 20),
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           const Text(
+                    //             "หลักสูตร:",
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //             ),
+                    //           ),
+                    //           Container(
+                    //             height: 30,
+                    //             width: 250,
+                    //             child: const Row(
+                    //               children: [
+                    //                 Text(
+                    //                   "วิทยาการคอมพิวเตออร์",
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     fontWeight: FontWeight.bold,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   height: 15,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       height: 50,
+                    //       width: 50,
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(25),
+                    //         color: const Color.fromARGB(255, 13, 187, 158),
+                    //       ),
+                    //       child: const Icon(
+                    //         Icons.menu_book,
+                    //         color: Colors.white,
+                    //       ),
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.only(left: 20),
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           const Text(
+                    //             "ชั้นปี:",
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //             ),
+                    //           ),
+                    //           Container(
+                    //             height: 30,
+                    //             width: 250,
+                    //             child: const Row(
+                    //               children: [
+                    //                 Text(
+                    //                   "3",
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     fontWeight: FontWeight.bold,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -343,47 +342,47 @@ class _ProfileState extends State<Profile> {
               ),
               Column(
                 children: [
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const AddTimeOpenCloseDialog(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     width: 350,
-                  //     height: 40,
-                  //     child: const Padding(
-                  //       padding: EdgeInsets.only(left: 20),
-                  //       child: Row(
-                  //         children: [
-                  //           Icon(Icons.calendar_month),
-                  //           SizedBox(
-                  //             width: 20,
-                  //           ),
-                  //           Text(
-                  //             "วันเวลาที่สะดวก",
-                  //             style: TextStyle(
-                  //               fontSize: 16,
-                  //               // fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //           Spacer(), // หรือ Expanded()
-                  //           Icon(
-                  //             Icons.arrow_forward_ios_rounded,
-                  //             size: 20,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const Padding(
-                  //   padding: EdgeInsets.only(right: 10, left: 10),
-                  //   child: Divider(),
-                  // ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddTimeOpenCloseDialog(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 350,
+                      height: 40,
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            Icon(Icons.calendar_month),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              "วันเวลาที่สะดวก",
+                              style: TextStyle(
+                                fontSize: 16,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Spacer(), // หรือ Expanded()
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 10, left: 10),
+                    child: Divider(),
+                  ),
                   InkWell(
                     onTap: () {
                       Navigator.push(

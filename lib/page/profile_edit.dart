@@ -106,7 +106,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: Text(
                     "ยืนยันแก้ไขชื่อ",
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),

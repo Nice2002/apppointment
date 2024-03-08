@@ -1,18 +1,18 @@
-import 'package:apppointment/page/add.dart';
-import 'package:apppointment/page/calendarpage.dart';
-import 'package:apppointment/page/home.dart';
-import 'package:apppointment/page/message.dart';
-import 'package:apppointment/page/profile.dart';
+import 'package:apppointment/page-2/add.dart';
+import 'package:apppointment/page-2/calendarpage.dart';
+import 'package:apppointment/page-2/home.dart';
+import 'package:apppointment/page-2/message.dart';
+import 'package:apppointment/page-2/profile.dart';
 import 'package:flutter/material.dart';
 
-class Index extends StatefulWidget {
-  const Index({super.key});
+class IndexAJ extends StatefulWidget {
+  const IndexAJ({super.key});
 
   @override
-  State<Index> createState() => _IndexState();
+  State<IndexAJ> createState() => _IndexAJState();
 }
 
-class _IndexState extends State<Index> {
+class _IndexAJState extends State<IndexAJ> {
   int index_color = 0;
   List Screen = [
     const Homepage(),

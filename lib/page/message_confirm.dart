@@ -23,13 +23,10 @@ class _Message_ConfirmState extends State<Message_Confirm> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     boxShadow: [
@@ -101,7 +98,7 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'วันที่      :  15 มกราคม 2567',
+                                  'วันที่      :  18 มกราคม 2567',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -144,7 +141,7 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'สถานที่   :  ห้อง 7-317',
+                                  'สถานที่   :  ห้องพัก 7-317/1',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -175,7 +172,7 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                             Row(
                               children: [
                                 const Text(
-                                  'ส่งรายงานความก้าวหน้าโครงงาน',
+                                  'ปรึกษาโครงงานจบการศึกษา',
                                   style: TextStyle(
                                     fontSize: 16,
                                     // fontWeight: FontWeight.bold,
@@ -202,109 +199,202 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                               height: 5,
                             ),
                             const Text(
-                              'ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไว้ที่นี่ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไว้ที่นี่ยินดีต้อนรับสู่คลิปบอร์ดของ Gboard ข้อความที่คุณคัดลอกจะบันทึกไ',
+                              'ปรึกษาโครงงานจบการศึกษาภาควิชาวิทยาการคอมพิวเตอร์และสารสนเทศ',
                               style: TextStyle(
                                 fontSize: 16,
                               ),
                             ),
                             Divider(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'ระดับความสำคัญ: ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Text(
+                                  'ปกติ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              children: [
+                                const Text(
+                                  'ช่องทางการติดต่อ:',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.email),
+                                const Text(
+                                  ' : adchara.n@live.ku.th',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   children: [
+                            //     const Text(
+                            //       'ไลน์:',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     const Text(
+                            //       ' tammanoon2545',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     const Text(
+                            //       'เบอร์โทรศัพท์:',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     const Text(
+                            //       ' 0981410472',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     const Text(
+                            //       'เฟซบุ๊ก:',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     const Text(
+                            //       ' Tammanoon Muensing',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            Divider(),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Center(
-                              child: Text(
-                                'ต้องการนัดหมายหรือไม่ ?',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey,
-                                  // fontWeight: FontWeight.bold,
-                                ),
+                      Column(
+                        children: [
+                          const Center(
+                            child: Text(
+                              'ต้องการนัดหมายหรือไม่ ?',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                                // fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Center(
-                              child: Container(
-                                width: 300,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color:
-                                      const Color.fromARGB(255, 13, 187, 158),
-                                ),
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: const Center(
-                                    child: Text(
-                                      "ยืนยันนัดหมาย",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: Container(
+                              width: 300,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color.fromARGB(255, 13, 187, 158),
+                              ),
+                              child: InkWell(
+                                onTap: () {},
+                                child: const Center(
+                                  child: Text(
+                                    "ยืนยันนัดหมาย",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Center(
-                              child: Container(
-                                width: 300,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue,
-                                ),
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: const Center(
-                                    child: Text(
-                                      "แก้ไขนัดหมาย",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Center(
+                            child: Container(
+                              width: 300,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blue,
+                              ),
+                              child: InkWell(
+                                onTap: () {},
+                                child: const Center(
+                                  child: Text(
+                                    "แก้ไขนัดหมาย",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Center(
-                              child: Container(
-                                width: 300,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.red,
-                                ),
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: const Center(
-                                    child: Text(
-                                      "ปฏิเสธนัดหมาย",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Center(
+                            child: Container(
+                              width: 300,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red,
+                              ),
+                              child: InkWell(
+                                onTap: () {},
+                                child: const Center(
+                                  child: Text(
+                                    "ปฏิเสธนัดหมาย",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -69,7 +69,7 @@ class _HomepageState extends State<Homepage> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: Image.asset(
-                              "assets/images/std2.jpg",
+                              "assets/images/teacher1.jpg",
                             ),
                           ),
                         ),
@@ -81,9 +81,9 @@ class _HomepageState extends State<Homepage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: 220,
+                                width: 300,
                                 child: Text(
-                                  "นายธรรมนูญ เหมือนสิงห์",
+                                  "อาจารย์อัจฉรา นามบุรี",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600),
@@ -91,9 +91,9 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               ),
                               SizedBox(
-                                width: 200,
+                                width: 300,
                                 child: Text(
-                                  "นิสิตหลักสูตรวิทยาการคอมพิวเตอร์และสารสนเทศ",
+                                  "อาจารย์หลักสูตรวิทยาการคอมพิวเตอร์และสารสนเทศ",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,

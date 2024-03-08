@@ -1,6 +1,6 @@
-import 'package:apppointment/page/message_wait.dart';
+import 'package:apppointment/page-2/message_wait.dart';
 import 'package:flutter/material.dart';
-import 'package:apppointment/page/message_confirm.dart';
+import 'package:apppointment/page-2/message_confirm.dart';
 
 class Message extends StatefulWidget {
   const Message({super.key});
@@ -95,8 +95,8 @@ class _MessageState extends State<Message> {
               date: '18 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
-              lecturer: 'อาจารย์อัจฉรา นามบุรี',
-              images: 'assets/images/teacher1.jpg',
+              lecturer: 'นายธรรมนูญ เหมือนสิงห์',
+              images: 'assets/images/std2.jpg',
               status: 'รอยืนยัน',
               priority: 'ปกติ',
               index: index,
@@ -109,24 +109,10 @@ class _MessageState extends State<Message> {
               date: '19 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์จารุวัฒน์ ไพใหล',
-              images: 'assets/images/teacher2.jpg',
+              lecturer: 'นายสุเมธ มณีจันทรา',
+              images: 'assets/images/std1.jpg',
               status: 'รอยืนยัน',
               priority: 'เร่งด่วน',
-              index: index,
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildAppointmentCard(
-              date: '19 มกราคม 2567',
-              time: '14.00-15.30 น.',
-              topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์จักรนรินทร์ คงเจริญ',
-              images: 'assets/images/teacher3.jpg',
-              status: 'รอยืนยัน',
-              priority: 'ปกติ',
               index: index,
             ),
           );
@@ -147,8 +133,8 @@ class _MessageState extends State<Message> {
               date: '20 มกราคม 2567',
               time: '9.00-12.00 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
-              lecturer: 'อาจารย์อัจฉรา นามบุรี',
-              images: 'assets/images/teacher1.jpg',
+              lecturer: 'นายธรรมนูญ เหมือนสิงห์',
+              images: 'assets/images/std2.jpg',
               status: 'รอยืนยัน',
               priority: 'ปกติ',
               index: index,
@@ -213,7 +199,6 @@ class _MessageState extends State<Message> {
                           borderRadius: BorderRadius.circular(5),
                           child: Image.asset(
                             images,
-                            width: 60,
                           ),
                         ),
                       ),

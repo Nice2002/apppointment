@@ -1,4 +1,4 @@
-import 'package:apppointment/page/history_detail.dart';
+import 'package:apppointment/page-2/history_detail.dart';
 import 'package:apppointment/widget/donut_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -72,8 +72,8 @@ class _HistroyState extends State<Histroy> {
               date: '2 มกราคม 2567',
               time: '11.00-12.30 น.',
               topic: 'ปรึกษาโครงงานจบการศึกษา',
-              lecturer: 'อาจารย์ อัจฉรา นามบุรี',
-              images: 'assets/images/teacher1.jpg',
+              lecturer: 'นายธรรมนูญ เหมือนสิงห์',
+              images: 'assets/images/std2.jpg',
               status: 'สำเร็จ',
               priority: 'ปกติ',
               index: index,
@@ -86,22 +86,8 @@ class _HistroyState extends State<Histroy> {
               date: '1 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์ จารุวัฒน์ ไพใหล',
-              images: 'assets/images/teacher2.jpg',
-              status: 'ปฏิเสธ',
-              priority: 'ปกติ',
-              index: index,
-            ),
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildAppointmentCard(
-              date: '1 มกราคม 2567',
-              time: '14.00-15.30 น.',
-              topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์ จักรนรินทร์ คงเจริญ',
-              images: 'assets/images/teacher3.jpg',
+              lecturer: 'นายสุเมธ มณีจันทรา',
+              images: 'assets/images/std1.jpg',
               status: 'ปฏิเสธ',
               priority: 'ปกติ',
               index: index,
@@ -153,7 +139,7 @@ class _HistroyState extends State<Histroy> {
                         height: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: Color.fromARGB(255, 238, 237, 237),
+                          color: Color.fromARGB(255, 226, 226, 226),
                           // boxShadow: [
                           //   BoxShadow(
                           //     color: Color.fromARGB(255, 170, 170, 170),
