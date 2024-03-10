@@ -109,7 +109,7 @@ class _MessageState extends State<Message> {
               date: '19 มกราคม 2567',
               time: '09.30-10.30 น.',
               topic: 'ประเมินผลการทดลอง',
-              lecturer: 'อาจารย์จารุวัฒน์ ไพใหล',
+              lecturer: 'ผู้ช่วยศาสตราจารย์ ดร.จารุวัฒน์ ไพใหล',
               images: 'assets/images/teacher2.jpg',
               status: 'รอยืนยัน',
               priority: 'เร่งด่วน',
@@ -123,7 +123,7 @@ class _MessageState extends State<Message> {
               date: '19 มกราคม 2567',
               time: '14.00-15.30 น.',
               topic: 'สรุปโครงการวิจัย',
-              lecturer: 'อาจารย์จักรนรินทร์ คงเจริญ',
+              lecturer: 'ผู้ช่วยศาสตราจารย์จิตสราญ สีกู่กา',
               images: 'assets/images/teacher3.jpg',
               status: 'รอยืนยัน',
               priority: 'ปกติ',
@@ -223,12 +223,16 @@ class _MessageState extends State<Message> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            lecturer,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: 250,
+                            child: Text(
+                              lecturer,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -407,12 +411,15 @@ class _MessageState extends State<Message> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            lecturer,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: 250,
+                            child: Text(
+                              lecturer,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 2),

@@ -49,7 +49,7 @@ class _MessageState extends State<Message> {
           children: [
             const TabBar(
               tabs: [
-                Tab(text: 'ขอนัดหมายของอาจารย์'),
+                Tab(text: 'ขอนัดหมายของนิสิต'),
                 Tab(text: 'ขอนัดหมายของฉัน'),
               ],
             ),
@@ -212,7 +212,7 @@ class _MessageState extends State<Message> {
                             lecturer,
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -396,7 +396,7 @@ class _MessageState extends State<Message> {
                             lecturer,
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

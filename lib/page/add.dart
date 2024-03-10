@@ -618,49 +618,22 @@ class _AddState extends State<Add> {
 class AutocompleteBasicExample extends StatefulWidget {
   const AutocompleteBasicExample({Key? key}) : super(key: key);
 
-  // static const List<String> _kOptions = <String>[
-  //   'สาวิณี แสงสุริยันต์',
-  //   'ฐาปนี เฮงสนั่นกูล',
-  //   'ศิริพร แสนศรี',
-  //   'พีระ ลิ่วลม',
-  //   'สุภาพ กัญญาคำ',
-  //   'จักรนรินทร์ คงเจริญ',
-  //   'วไลลักษณ์ วงษ์รื่น',
-  //   'ศศิธร สุชัยยะ',
-  //   'ถนอมศักดิ์ วงศ์มีแก้ว',
-  //   'อัจฉรา นามบุรี',
-  //   'สุรศักดิ์ ตั้งสกุล',
-  //   'จิตสราญ สีกู่กา',
-  //   'จารุวัฒน์ ไพใหล',
-  //   'บวรรัตน์ ศรีมาน',
-  // ];
   static const Map<String, String> _kOptionsWithCodes = <String, String>{
-    'สาวิณี แสงสุริยันต์': 'fsesns',
-    'ฐาปนี เฮงสนั่นกูล': 'fsetnh',
-    'ศิริพร แสนศรี': 'fsespt',
-    'พีระ ลิ่วลม': 'fseprl',
-    'สุภาพ กัญญาคำ': 'fsespk',
-    'จักรนรินทร์ คงเจริญ': 'csncrk',
-    'วไลลักษณ์ วงษ์รื่น': 'fsewlw',
-    'ศศิธร สุชัยยะ': 'fsests',
-    'ถนอมศักดิ์ วงศ์มีแก้ว': 'fsetsw',
-    'อัจฉรา นามบุรี': 'csnarn',
-    'สุรศักดิ์ ตั้งสกุล': 'fsesst',
-    'จิตสราญ สีกู่กา': 'fsejrs',
-    'จารุวัฒน์ ไพใหล': 'fsejwp',
-    'บวรรัตน์ ศรีมาน': 'fsebws',
+    'อาจารย์ ดร.สาวิณี แสงสุริยันต์': 'fsesns',
+    'ผู้ช่วยศาสตราจารย์ฐาปนี เฮงสนั่นกูล': 'fsetnh',
+    'ผู้ช่วยศาสตราจารย์ศิริพร ทับทิม': 'fsespt',
+    'ผู้ช่วยศาสตราจารย์ ดร.พีระ ลิ่วลม': 'fseprl',
+    'ผู้ช่วยศาสตราจารย์ ดร.สุภาพ กัญญาคำ': 'fsespk',
+    'ผู้ช่วยศาสตราจารย์ ดร.จักรนรินทร์ คงเจริญ': 'csncrk',
+    'ผู้ช่วยศาสตราจารย์วไลลักษณ์ วงษ์รื่น': 'fsewlw',
+    'อาจารย์ ดร.ศศิธร สุชัยยะ': 'fsests',
+    'ผู้ช่วยศาสตราจารย์ ดร.ถนอมศักดิ์ วงศ์มีแก้ว': 'fsetsw',
+    'อาจารย์อัจฉรา นามบุรี': 'csnarn',
+    'ผู้ช่วยศาสตราจารย์ ดร.สุรศักดิ์ ตั้งสกุล': 'fsesst',
+    'ผู้ช่วยศาสตราจารย์จิตสราญ สีกู่กา': 'fsejrs',
+    'ผู้ช่วยศาสตราจารย์ ดร.จารุวัฒน์ ไพใหล': 'fsejwp',
+    'อาจารย์ ดร.บวรรัตน์ ศรีมาน': 'fsebws',
   };
-
-  void _openGoogleMapsForDirections(String teacher_id, int sm, int yr) async {
-    final url =
-        'https://misreg.csc.ku.ac.th/schedule_v2/getTable_v2.php?teacher_id=fsejwp&&sm=2&yr=66';
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   @override
   _AutocompleteBasicExampleState createState() =>
@@ -670,108 +643,105 @@ class AutocompleteBasicExample extends StatefulWidget {
 class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
   TextEditingController _textEditingController = TextEditingController();
 
+  // void _openLinkteacher(String teacher_id, String sm, String yr) async {
+  //   final Uri uri = Uri.parse(
+  //       'https://misreg.csc.ku.ac.th/schedule_v2/getTable_v2.php?teacher_id=$teacher_id&&sm=$sm&yr=$yr');
+
+  //   try {
+  //     if (await canLaunch(uri.toString())) {
+  //       await launch(uri.toString());
+  //     } else {
+  //       throw 'Could not launch $uri';
+  //     }
+  //   } on PlatformException catch (e) {
+  //     throw 'Could not launch $uri: ${e.message}';
+  //   }
+  // }
+
   Widget _dialogLink(String teacherId) {
+    final smController = TextEditingController();
+    final yrController = TextEditingController();
+    int currentYear = DateTime.now().year;
+    int buddhistYear = currentYear + 543;
+    List<int> availableYears =
+        List.generate(5, (index) => buddhistYear - index);
+
+    String selectedTerm = '1';
+    String selectedYear = buddhistYear.toString();
+
     return Dialog(
-      backgroundColor: Colors.white,
       child: Container(
-        height: 250,
+        height: 320,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'ปีการศึกษา',
+                    'ระบุปีการศึกษาและภาคการศึกษา',
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 13, 187, 158),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.0,
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 1.0),
-                        ),
-                      ],
-                    ),
-                    child: Theme(
-                      data: ThemeData(
-                        inputDecorationTheme: InputDecorationTheme(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'กรอกปีการศึกษา',
-                            hintStyle: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: GoogleFonts.prompt().fontFamily,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'เทอม',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 13, 187, 158),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.0,
-                          blurRadius: 3.0,
-                          offset: const Offset(0.0, 1.0),
-                        ),
-                      ],
-                    ),
-                    child: Theme(
-                      data: ThemeData(
-                        inputDecorationTheme: InputDecorationTheme(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'กรอกเทอม',
-                            hintStyle: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: GoogleFonts.prompt().fontFamily,
-                            ),
-                          ),
-                        ),
-                      ),
+                      fontSize: 14,
+                      color: Colors.black,
                     ),
                   ),
                   SizedBox(
                     height: 10,
+                  ),
+                  Text(
+                    'ปีการศึกษา:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    value: selectedYear,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedYear = newValue!;
+                      });
+                    },
+                    items: availableYears.map((year) {
+                      return DropdownMenuItem<String>(
+                        value: year.toString(),
+                        child: Text(year.toString()),
+                      );
+                    }).toList(),
+                  ),
+                  Text(
+                    'เทอม:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    value: selectedTerm,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedTerm = newValue!;
+                      });
+                      print(
+                          selectedTerm); // ตรวจสอบค่า selectedTerm ว่าถูกตั้งค่าถูกต้องหรือไม่
+                    },
+                    items: [
+                      DropdownMenuItem(
+                        child: Text('1'),
+                        value: '1',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('2'),
+                        value: '2',
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 60,
                   ),
                   Container(
                     height: 45,
@@ -781,19 +751,10 @@ class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
                     ),
                     child: InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => ChangePassword()));
-                        // AwesomeNotifications().createNotification(
-                        //   content: NotificationContent(
-                        //     id: 3,
-                        //     channelKey: "basic_channel",
-                        //     title: "Notification test",
-                        //     body: "Notification test",
-                        //     color: Colors.deepPurple,
-                        //   ),
-                        // );
+                        launchUrl(Uri.parse(
+                            "https://misreg.csc.ku.ac.th/schedule_v2/getTable_v2.php?teacher_id=$teacherId&&sm=$selectedTerm&yr=${selectedYear.substring(2)}"));
+                        print(selectedTerm.toString());
+                        print(selectedYear.toString());
                       },
                       child: const Center(
                         child: Text(
@@ -828,7 +789,7 @@ class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
               return const Iterable<String>.empty();
             }
             return AutocompleteBasicExample._kOptionsWithCodes.keys.where(
-              (String option) => option.toLowerCase().startsWith(
+              (String option) => option.toLowerCase().contains(
                     textEditingValue.text.toLowerCase(),
                   ),
             );
@@ -838,14 +799,6 @@ class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
               _selectedName = selection;
             });
             debugPrint('You just selected $selection');
-            if (AutocompleteBasicExample._kOptionsWithCodes
-                .containsKey(selection)) {
-              String teacherId =
-                  AutocompleteBasicExample._kOptionsWithCodes[];
-              _dialogLink(teacherId);
-            } else {
-              debugPrint('No corresponding ID found for $selection');
-            }
           },
           fieldViewBuilder: (BuildContext context,
               TextEditingController fieldTextEditingController,
@@ -894,8 +847,11 @@ class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder: (context) => _dialogLink(),
+                  builder: (context) => _dialogLink(AutocompleteBasicExample
+                      ._kOptionsWithCodes[_selectedName]!),
                 );
+                print(AutocompleteBasicExample
+                    ._kOptionsWithCodes[_selectedName]!);
               },
               child: Text(
                 'ลิงก์ตารางสอน: $_selectedName',
@@ -907,3 +863,17 @@ class _AutocompleteBasicExampleState extends State<AutocompleteBasicExample> {
     );
   }
 }
+
+  // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => ChangePassword()));
+                        // AwesomeNotifications().createNotification(
+                        //   content: NotificationContent(
+                        //     id: 3,
+                        //     channelKey: "basic_channel",
+                        //     title: "Notification test",
+                        //     body: "Notification test",
+                        //     color: Colors.deepPurple,
+                        //   ),
+                        // );

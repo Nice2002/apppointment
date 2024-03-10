@@ -165,7 +165,7 @@ class _HistroyState extends State<Histroy> {
                             lecturer,
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

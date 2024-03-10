@@ -28,8 +28,7 @@ class _AddState extends State<Add> {
   DateTime today = DateTime.now();
   String name = 'เลือก';
   String strattime = 'เลือก';
-  String fistime = 'เลือก';
-  String business = 'เลือก';
+  String firstime = 'เลือก';
   int title = -1;
   void _titleCheckboxChanged(int index) {
     setState(() {
@@ -72,218 +71,154 @@ class _AddState extends State<Add> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 3.0,
-                  blurRadius: 5.0,
-                  offset: const Offset(0.0, 1.0), // changes position of shadow
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'เลือกหลักสูตรของนิสิต',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-              color: Colors.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'เลือกหลักสูตรของนิสิต',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 55,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 13, 187, 158),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 55,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 13, 187, 158),
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 2.0,
+                              blurRadius: 8.0,
+                              offset: const Offset(0.0, 1.0),
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 2.0,
-                                blurRadius: 8.0,
-                                offset: const Offset(0.0, 1.0),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: DropdownButton<String>(
-                                value: fistime,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 30,
-                                ),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: GoogleFonts.prompt().fontFamily,
-                                ),
-                                underline: Container(
-                                  height: 0,
-                                  color: Colors.transparent,
-                                ),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    fistime = newValue ?? 'เลือก';
-                                  });
-                                },
-                                items: <String>[
-                                  'เลือก',
-                                  'หลักสูตรวิทยาการคอมพิวเตอร์',
-                                  'หลักสูตรวิทยาการข้อมูล',
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Container(
-                                      height: 40,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          value,
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'เลือกนิสิตที่ต้องการเข้าพบ',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  AutocompleteBasicExample(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'เรื่องที่ต้องการนัดหมาย',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: title == 0,
-                      onChanged: (value) {
-                        _titleCheckboxChanged(0);
-                      },
-                      title: Text('โครงงาน'),
-                    ),
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: title == 1,
-                      onChanged: (value) {
-                        _titleCheckboxChanged(1);
-                      },
-                      title: Text('งานกิจกรรม'),
-                    ),
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: title == 2,
-                      onChanged: (value) {
-                        _titleCheckboxChanged(2);
-                      },
-                      title: Text('อื่นๆ'),
-                    ),
-                  ),
-                  if (title == 2)
-                    Container(
-                      height: 55,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 13, 187, 158),
-                        ),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1.0,
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 1.0),
-                          ),
-                        ],
-                      ),
-                      child: Theme(
-                        data: ThemeData(
-                          inputDecorationTheme: InputDecorationTheme(
-                            border: InputBorder.none,
-                          ),
+                          ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'กรอกเรื่อง',
-                              hintStyle: TextStyle(
-                                fontSize: 16.0,
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: DropdownButton<String>(
+                              value: name,
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                              ),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: TextStyle(
+                                color: Colors.black,
                                 fontFamily: GoogleFonts.prompt().fontFamily,
                               ),
-                            ),
-                          ),
-                        ),
+                              underline: Container(
+                                height: 0,
+                                color: Colors.transparent,
+                              ),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  name = newValue ?? 'เลือก';
+                                });
+                              },
+                              items: <String>[
+                                'เลือก',
+                                'หลักสูตรวิชาวิทยาการคอมพิวเตอร์',
+                                'หลักสูตรวิชาวิทยาการข้อมูล',
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Container(
+                                    height: 40,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        value,
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            )),
                       ),
                     ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'รายละเอียดการนัดหมาย',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'เลือกนิสิตที่ต้องการเข้าพบ',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
                     ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                AutocompleteBasicExample(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'เรื่องที่ต้องการนัดหมาย',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.5),
                   ),
-                  const SizedBox(
-                    height: 5,
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: title == 0,
+                    onChanged: (value) {
+                      _titleCheckboxChanged(0);
+                    },
+                    title: Text('โครงงาน'),
                   ),
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: title == 1,
+                    onChanged: (value) {
+                      _titleCheckboxChanged(1);
+                    },
+                    title: Text('งานกิจกรรม'),
+                  ),
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: title == 2,
+                    onChanged: (value) {
+                      _titleCheckboxChanged(2);
+                    },
+                    title: Text('อื่นๆ'),
+                  ),
+                ),
+                if (title == 2)
                   Container(
-                    height: 180,
+                    height: 55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
@@ -306,15 +241,10 @@ class _AddState extends State<Add> {
                         ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        padding: const EdgeInsets.only(left: 15),
                         child: TextFormField(
-                          maxLines: 6,
-                          maxLength: 150,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(150)
-                          ],
                           decoration: InputDecoration(
-                            hintText: 'กรอกรายละเอียดของเรื่อง',
+                            hintText: 'กรอกเรื่อง',
                             hintStyle: TextStyle(
                               fontSize: 16.0,
                               fontFamily: GoogleFonts.prompt().fontFamily,
@@ -324,383 +254,437 @@ class _AddState extends State<Add> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'รายละเอียดการนัดหมาย',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.5),
                   ),
-                  Row(
-                    children: [
-                      // const Icon(
-                      //   Icons.calendar_month,
-                      //   size: 25,
-                      // ),
-                      // const SizedBox(
-                      //   width: 3,
-                      // ),
-                      Text(
-                        'เลือกวันที่ต้องการนัดหมาย',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  height: 180,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color.fromARGB(255, 13, 187, 158),
+                    ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1.0,
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 1.0),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 13, 187, 158)),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2.0,
-                          blurRadius: 5.0,
-                          offset: const Offset(0.0, 1.0),
-                        ),
-                      ],
-                    ),
-                    child: TableCalendar<String>(
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
+                  child: Theme(
+                    data: ThemeData(
+                      inputDecorationTheme: InputDecorationTheme(
+                        border: InputBorder.none,
                       ),
-                      rowHeight: 45,
-                      availableGestures: AvailableGestures.all,
-                      focusedDay: today,
-                      firstDay: DateTime.utc(2010, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      selectedDayPredicate: (day) => isSameDay(day, today),
-                      calendarStyle:
-                          const CalendarStyle(outsideDaysVisible: false),
-                      onDaySelected: _onDaySelected,
-                      enabledDayPredicate: (day) => !_isWeekend(day),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: TextFormField(
+                        maxLines: 6,
+                        maxLength: 150,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(150)
+                        ],
+                        decoration: InputDecoration(
+                          hintText: 'กรอกรายละเอียดของเรื่อง',
+                          hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: GoogleFonts.prompt().fontFamily,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      // const Icon(
-                      //   Icons.watch_later,
-                      //   size: 25,
-                      // ),
-                      // const SizedBox(
-                      //   width: 3,
-                      // ),
-                      Text(
-                        'ช่วงเวลา',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    // const Icon(
+                    //   Icons.calendar_month,
+                    //   size: 25,
+                    // ),
+                    // const SizedBox(
+                    //   width: 3,
+                    // ),
+                    Text(
+                      'เลือกวันที่ต้องการนัดหมาย',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 13, 187, 158)),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2.0,
+                        blurRadius: 5.0,
+                        offset: const Offset(0.0, 1.0),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 55,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 13, 187, 158)),
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 2.0,
-                              blurRadius: 8.0,
-                              offset: const Offset(0.0, 1.0),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: DropdownButton<String>(
-                              value: strattime,
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                size: 30,
-                              ),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: GoogleFonts.prompt().fontFamily,
-                              ),
-                              underline: Container(
-                                height: 0,
-                                color: Colors.transparent,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(
-                                  () {
-                                    strattime = newValue ??
-                                        'เลือก'; // Handle null values
-                                  },
-                                );
-                              },
-                              items: <String>[
-                                'เลือก',
-                                '09.00',
-                                '09.30',
-                                '10.00',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                    height: 40,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        value,
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'ถึง',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ),
-                      Container(
-                        height: 55,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 13, 187, 158),
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 2.0,
-                              blurRadius: 8.0,
-                              offset: const Offset(0.0, 1.0),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: DropdownButton<String>(
-                              value: fistime,
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                                size: 30,
-                              ),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: GoogleFonts.prompt().fontFamily,
-                              ),
-                              underline: Container(
-                                height: 0,
-                                color: Colors.transparent,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(
-                                  () {
-                                    fistime = newValue ??
-                                        'เลือก'; // Handle null values
-                                  },
-                                );
-                              },
-                              items: <String>[
-                                'เลือก',
-                                '10.00',
-                                '10.30',
-                                '11.00',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Container(
-                                    height: 40,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        value,
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'ห้อง',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
+                  child: TableCalendar<String>(
+                    headerStyle: const HeaderStyle(
+                      formatButtonVisible: false,
+                      titleCentered: true,
                     ),
+                    rowHeight: 45,
+                    availableGestures: AvailableGestures.all,
+                    focusedDay: today,
+                    firstDay: DateTime.utc(2010, 10, 16),
+                    lastDay: DateTime.utc(2030, 3, 14),
+                    selectedDayPredicate: (day) => isSameDay(day, today),
+                    calendarStyle:
+                        const CalendarStyle(outsideDaysVisible: false),
+                    onDaySelected: _onDaySelected,
+                    enabledDayPredicate: (day) => !_isWeekend(day),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: room == 0,
-                      onChanged: (value) {
-                        _roomCheckboxChanged(0);
-                      },
-                      title: Text('ห้องพักอาจารย์'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    // const Icon(
+                    //   Icons.watch_later,
+                    //   size: 25,
+                    // ),
+                    // const SizedBox(
+                    //   width: 3,
+                    // ),
+                    Text(
+                      'ช่วงเวลา',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: room == 1,
-                      onChanged: (value) {
-                        _roomCheckboxChanged(1);
-                      },
-                      title: Text('อื่นๆ'),
-                    ),
-                  ),
-                  if (room == 1)
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Container(
                       height: 55,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: const Color.fromARGB(255, 13, 187, 158),
-                        ),
+                            color: const Color.fromARGB(255, 13, 187, 158)),
+                        borderRadius: BorderRadius.circular(10.0),
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1.0,
-                            blurRadius: 3.0,
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 2.0,
+                            blurRadius: 8.0,
                             offset: const Offset(0.0, 1.0),
                           ),
                         ],
                       ),
-                      child: Theme(
-                        data: ThemeData(
-                          inputDecorationTheme: InputDecorationTheme(
-                            border: InputBorder.none,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'กรอกห้องที่สะดวก',
-                              hintStyle: TextStyle(
-                                fontSize: 16.0,
-                                fontFamily: GoogleFonts.prompt().fontFamily,
-                              ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: DropdownButton<String>(
+                            value: strattime,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              size: 30,
                             ),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: GoogleFonts.prompt().fontFamily,
+                            ),
+                            underline: Container(
+                              height: 0,
+                              color: Colors.transparent,
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(
+                                () {
+                                  strattime =
+                                      newValue ?? 'เลือก'; // Handle null values
+                                },
+                              );
+                            },
+                            items: <String>[
+                              'เลือก',
+                              '09.00',
+                              '09.30',
+                              '10.00',
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Container(
+                                  height: 40,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
                       ),
                     ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'สถานะ',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black.withOpacity(0.5),
+                    Text(
+                      'ถึง',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: status == 0,
-                      onChanged: (value) {
-                        _statusCheckboxChanged(0);
-                      },
-                      title: Text('ปกติ'),
-                    ),
-                  ),
-                  Container(
-                    height: 45,
-                    child: CheckboxListTile(
-                      value: status == 1,
-                      onChanged: (value) {
-                        _statusCheckboxChanged(1);
-                      },
-                      title: Text('เร่งด่วน'),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Container(
-                      width: 375,
-                      height: 50,
+                    Container(
+                      height: 55,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 13, 187, 158),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 2.0,
+                            blurRadius: 8.0,
+                            offset: const Offset(0.0, 1.0),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: DropdownButton<String>(
+                            value: firstime,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              size: 30,
+                            ),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: GoogleFonts.prompt().fontFamily,
+                            ),
+                            underline: Container(
+                              height: 0,
+                              color: Colors.transparent,
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(
+                                () {
+                                  firstime =
+                                      newValue ?? 'เลือก'; // Handle null values
+                                },
+                              );
+                            },
+                            items: <String>[
+                              'เลือก',
+                              '10.00',
+                              '10.30',
+                              '11.00',
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Container(
+                                  height: 40,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'ห้อง',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: room == 0,
+                    onChanged: (value) {
+                      _roomCheckboxChanged(0);
+                    },
+                    title: Text('ห้องพักอาจารย์'),
+                  ),
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: room == 1,
+                    onChanged: (value) {
+                      _roomCheckboxChanged(1);
+                    },
+                    title: Text('อื่นๆ'),
+                  ),
+                ),
+                if (room == 1)
+                  Container(
+                    height: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
                         color: const Color.fromARGB(255, 13, 187, 158),
                       ),
-                      child: InkWell(
-                        onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => ChangePassword()));
-                          AwesomeNotifications().createNotification(
-                            content: NotificationContent(
-                              id: 3,
-                              channelKey: "basic_channel",
-                              title: "Notification test",
-                              body: "Notification test",
-                              color: Colors.deepPurple,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1.0,
+                          blurRadius: 3.0,
+                          offset: const Offset(0.0, 1.0),
+                        ),
+                      ],
+                    ),
+                    child: Theme(
+                      data: ThemeData(
+                        inputDecorationTheme: InputDecorationTheme(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'กรอกห้องที่สะดวก',
+                            hintStyle: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: GoogleFonts.prompt().fontFamily,
                             ),
-                          );
-                        },
-                        child: const Center(
-                          child: Text(
-                            "เพิ่มข้อมูลนัดหมาย",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'สถานะ',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.5),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: status == 0,
+                    onChanged: (value) {
+                      _statusCheckboxChanged(0);
+                    },
+                    title: Text('ปกติ'),
+                  ),
+                ),
+                Container(
+                  height: 45,
+                  child: CheckboxListTile(
+                    value: status == 1,
+                    onChanged: (value) {
+                      _statusCheckboxChanged(1);
+                    },
+                    title: Text('เร่งด่วน'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Container(
+                    width: 375,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(255, 13, 187, 158),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => ChangePassword()));
+                        AwesomeNotifications().createNotification(
+                          content: NotificationContent(
+                            id: 3,
+                            channelKey: "basic_channel",
+                            title: "Notification test",
+                            body: "Notification test",
+                            color: Colors.deepPurple,
+                          ),
+                        );
+                      },
+                      child: const Center(
+                        child: Text(
+                          "เพิ่มข้อมูลนัดหมาย",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           ),
         ),

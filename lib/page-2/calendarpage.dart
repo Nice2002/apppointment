@@ -270,7 +270,7 @@ class _CalendarpageState extends State<Calendarpage> {
                                         students[i ~/ 1],
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
                                         maxLines: 1,

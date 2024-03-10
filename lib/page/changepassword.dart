@@ -18,26 +18,23 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
                   'รหัสผ่านเดิม',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withOpacity(0.5),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Container(
+                Container(
                   height: 55,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -74,23 +71,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
                   'รหัสผ่านใหม่',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withOpacity(0.5),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Container(
+                Container(
                   height: 55,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -127,23 +118,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
                   'ยืนยันรหัสผ่านใหม่',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withOpacity(0.5),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Container(
+                Container(
                   height: 55,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -180,47 +165,47 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                   ),
                 ),
-              ),
-              // const SizedBox(
-              //   height: 30,
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 30),
-              //   child: Container(
-              //     height: 50,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(10),
-              //       color: const Color.fromARGB(255, 13, 187, 158),
-              //     ),
-              //     child: InkWell(
-              //       onTap: () {
-              //         // Navigator.push(
-              //         //     context,
-              //         //     MaterialPageRoute(
-              //         //         builder: (context) => ChangePassword()));
-              //         AwesomeNotifications().createNotification(
-              //           content: NotificationContent(
-              //             id: 3,
-              //             channelKey: "basic_channel",
-              //             title: "แจ้งเตือนคำขอนัดหมาย",
-              //             body: "ในวันที่ 16 มกราคม 2567 เวลา 11.00-12.30 น.",
-              //             color: Colors.deepPurple,
-              //           ),
-              //         );
-              //       },
-              //       child: const Center(
-              //         child: Text(
-              //           "เปลี่ยนรหัสผ่าน",
-              //           style: TextStyle(
-              //               fontSize: 18,
-              //               fontWeight: FontWeight.bold,
-              //               color: Colors.white),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
+                // const SizedBox(
+                //   height: 30,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                //   child: Container(
+                //     height: 50,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(10),
+                //       color: const Color.fromARGB(255, 13, 187, 158),
+                //     ),
+                //     child: InkWell(
+                //       onTap: () {
+                //         // Navigator.push(
+                //         //     context,
+                //         //     MaterialPageRoute(
+                //         //         builder: (context) => ChangePassword()));
+                //         AwesomeNotifications().createNotification(
+                //           content: NotificationContent(
+                //             id: 3,
+                //             channelKey: "basic_channel",
+                //             title: "แจ้งเตือนคำขอนัดหมาย",
+                //             body: "ในวันที่ 16 มกราคม 2567 เวลา 11.00-12.30 น.",
+                //             color: Colors.deepPurple,
+                //           ),
+                //         );
+                //       },
+                //       child: const Center(
+                //         child: Text(
+                //           "เปลี่ยนรหัสผ่าน",
+                //           style: TextStyle(
+                //               fontSize: 18,
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.white),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
