@@ -83,8 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Positioned.fill(
             bottom: 350,
-            child: Image.network(
-              "https://scontent.fbkk5-6.fna.fbcdn.net/v/t39.30808-6/373516276_762057482390449_8072414650951382097_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=MI-mBC3RXz4Q7kNvgHQ-mao&_nc_ht=scontent.fbkk5-6.fna&oh=00_AYB59LcAguKY7QkPvFMJ6Ygpg-JbDsPHEDFJ5MFZUv52Ow&oe=667469E5",
+            child: Image.asset(
+              "assets/images/login.jpg",
               fit: BoxFit.cover,
             ),
           ),
