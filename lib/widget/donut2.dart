@@ -3,7 +3,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class DonutChart extends StatefulWidget {
-  const DonutChart({super.key});
+  final int? count1;
+  final int? count2;
+  final int? count3;
+  const DonutChart(this.count1, this.count2, this.count3, {Key? key})
+      : super(key: key);
 
   @override
   State<DonutChart> createState() => _DonutChartState();
@@ -26,16 +30,18 @@ class _DonutChartState extends State<DonutChart> {
                   PieChartData(
                     pieTouchData: PieTouchData(
                       touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
+                        setState(
+                          () {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              touchedIndex = -1;
+                              return;
+                            }
+                            touchedIndex = pieTouchResponse
+                                .touchedSection!.touchedSectionIndex;
+                          },
+                        );
                       },
                     ),
                     borderData: FlBorderData(
@@ -44,19 +50,20 @@ class _DonutChartState extends State<DonutChart> {
                     ),
                     sectionsSpace: 5,
                     centerSpaceRadius: 50,
-                    sections: showingSections(),
+                    sections: showingSections(widget.count1 ?? 0,
+                        widget.count2 ?? 0, widget.count3 ?? 0),
                   ),
                 ),
               ),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 30, top: 30),
             child: Column(
               children: <Widget>[
                 Indicator(
                   color: Colors.green,
-                  text: 'จำนวนครั้งนัดหมาย 25 ครั้ง',
+                  text: 'จำนวนครั้งนัดหมายสำเร็จ ${widget.count2} ครั้ง',
                   isSquare: true,
                 ),
                 SizedBox(
@@ -64,7 +71,7 @@ class _DonutChartState extends State<DonutChart> {
                 ),
                 Indicator(
                   color: Colors.blue,
-                  text: 'จำนวนครั้งรอนัดหมาย 10 ครั้ง',
+                  text: 'จำนวนครั้งรอวันนัดหมาย ${widget.count1} ครั้ง',
                   isSquare: true,
                 ),
                 SizedBox(
@@ -72,17 +79,9 @@ class _DonutChartState extends State<DonutChart> {
                 ),
                 Indicator(
                   color: Colors.red,
-                  text: 'จำนวนครั้งปฏิเสธ 5 ครั้ง',
+                  text: 'จำนวนครั้งนัดหมายถูกปฏิเสธ ${widget.count3} ครั้ง',
                   isSquare: true,
                 ),
-                SizedBox(
-                  height: 4,
-                ),
-                // Indicator(
-                //   color: Colors.green,
-                //   text: 'Fourth',
-                //   isSquare: true,
-                // ),
               ],
             ),
           ),
@@ -91,68 +90,75 @@ class _DonutChartState extends State<DonutChart> {
     );
   }
 
-  List<PieChartSectionData> showingSections() {
-    return List.generate(3, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.blue,
-            value: 25,
-            title: '25%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.red,
-            value: 10,
-            title: '10%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: Colors.green,
-            value: 65,
-            title: '65%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        // case 3:
-        //   return PieChartSectionData(
-        //     color: Colors.green,
-        //     value: 10,
-        //     title: '10%',
-        //     radius: radius,
-        //     titleStyle: TextStyle(
-        //       fontSize: fontSize,
-        //       fontWeight: FontWeight.bold,
-        //       color: Colors.white,
-        //       shadows: shadows,
-        //     ),
-        //   );
-        default:
-          throw Error();
+  List<PieChartSectionData> showingSections(
+      int count1, int count2, int count3) {
+    void calculatePercentage(List<int> values) {
+      // หาผลรวมของค่าทั้งหมด
+      int total = values.reduce((sum, value) => sum + value);
+
+      // คำนวณเปอร์เซ็นต์และแสดงผล
+      for (int i = 0; i < values.length; i++) {
+        double percentage = (values[i] / total) * 100;
+        print('ค่าที่ ${i + 1} คิดเป็น $percentage% ของผลรวมทั้งหมด');
       }
-    });
+    }
+
+    return List.generate(
+      3,
+      (i) {
+        final isTouched = i == touchedIndex;
+        final fontSize = isTouched ? 25.0 : 16.0;
+        final radius = isTouched ? 60.0 : 50.0;
+        const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+
+        switch (i) {
+          case 0:
+            return PieChartSectionData(
+              color: Colors.blue,
+              value: count1.toDouble(),
+              title:
+                  '${((count1 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
+              radius: radius,
+              titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: shadows,
+              ),
+            );
+          case 1:
+            return PieChartSectionData(
+              color: Colors.green,
+              value: count2.toDouble(), // ใช้ค่า count1 ในการกำหนดค่า
+              title:
+                  '${((count2 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%', // คำนวณและแสดงเปอร์เซ็นต์
+              radius: radius,
+              titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: shadows,
+              ),
+            );
+
+          case 2:
+            return PieChartSectionData(
+              color: Colors.red,
+              value: count3.toDouble(),
+              title:
+                  '${((count3 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
+              radius: radius,
+              titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: shadows,
+              ),
+            );
+          default:
+            throw Error();
+        }
+      },
+    );
   }
 }

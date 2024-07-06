@@ -359,7 +359,7 @@ class _HomepageState extends State<Homepage> {
                             height: 30,
                           ),
                           // Chart(),
-                          DonutChart(),
+                          // DonutChart(),
                           SizedBox(
                             height: 10,
                           ),

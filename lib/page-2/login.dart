@@ -180,15 +180,15 @@ class _LoginState extends State<Login> {
                         onTap: () {
                           if (emailController.text == "6440201793" &&
                               passwordController.text == "6440201793") {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Index()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => Index()));
                           } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const IndexAJ()));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => const IndexAJ()));
                           }
                         },
                         child: const Center(

@@ -1,9 +1,14 @@
+import 'package:apppointment/api/appointments_api.dart';
 import 'package:apppointment/page/calendar_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:http/http.dart' as http;
+import '/globals.dart' as globals;
+import 'package:intl/intl.dart';
 
 class Calendarpage extends StatefulWidget implements PreferredSizeWidget {
-  const Calendarpage({Key? key}) : super(key: key);
+  final int user_id;
+  const Calendarpage(this.user_id, {Key? key}) : super(key: key);
 
   @override
   State<Calendarpage> createState() => _CalendarpageState();
@@ -13,16 +18,23 @@ class Calendarpage extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CalendarpageState extends State<Calendarpage> {
+  late Future<List<AppointmentModel>> futureAppointmentWait;
   late DateTime today;
-  late DateTime selectedFutureDay; // เพิ่มตัวแปรนี้
-  Map<DateTime, List<String>> _events = {};
+  late DateTime selectedFutureDay;
+  Map<String, List<String>> _events = {};
   late final ValueNotifier<List<String>> _selectedEvents;
 
   @override
   void initState() {
     super.initState();
+    futureAppointmentWait = fetchAppointmentWait(widget.user_id);
+    futureAppointmentWait.then((appointments) {
+      setState(() {
+        _events = _getEventsFromAppointments(appointments);
+      });
+    });
     today = DateTime.now();
-    selectedFutureDay = today; // กำหนดค่าเริ่มต้นเป็นวันปัจจุบัน
+    selectedFutureDay = today;
     _selectedEvents = ValueNotifier<List<String>>([]);
   }
 
@@ -32,38 +44,40 @@ class _CalendarpageState extends State<Calendarpage> {
     super.dispose();
   }
 
+  Map<String, List<String>> _getEventsFromAppointments(
+      List<AppointmentModel> appointments) {
+    Map<String, List<String>> events = {};
+    for (var appointment in appointments) {
+      DateTime date = DateTime.parse("${appointment.date}");
+      String dateKey =
+          DateFormat('yyyy-MM-dd').format(date); // แปลง DateTime เป็นสตริง
+      if (events[dateKey] == null) {
+        events[dateKey] = [];
+      }
+      events[dateKey]!.add(appointment.title);
+    }
+    return events;
+  }
+
   List<String> _getEventsForDay(DateTime day) {
-    return _events[day] ?? [];
+    String dateKey =
+        DateFormat('yyyy-MM-dd').format(day); // แปลง DateTime เป็นสตริง
+    return _events[dateKey] ?? [];
   }
 
   bool _isWeekend(DateTime day) {
     return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
   }
 
-  bool _isWithin3Days(DateTime day) {
-    final diffToToday = day.difference(today).inDays;
-    return diffToToday >= 0 && diffToToday <= 3;
-  }
-
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      if (!_isWithin3Days(day)) {
-        return;
-      }
       today = day;
     });
+    _selectedEvents.value = _getEventsForDay(day);
   }
 
   @override
   Widget build(BuildContext context) {
-    _events = {
-      DateTime.utc(2024, 1, 15): [
-        'ปรึกษาโครงงานจบการศึกษา',
-        'นัดหมายพูดคุยรายละเอียดโครงงาน'
-      ],
-      // DateTime.utc(2024, 1, 16): ['นัดหมายพูดคุยรายละเอียดโครงงาน'],
-    };
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -123,8 +137,6 @@ class _CalendarpageState extends State<Calendarpage> {
                   calendarStyle: const CalendarStyle(outsideDaysVisible: false),
                   eventLoader: _getEventsForDay,
                   onDaySelected: _onDaySelected,
-                  enabledDayPredicate: (day) =>
-                      !_isWeekend(day) && _isWithin3Days(day),
                 ),
               ),
             ),
@@ -143,398 +155,249 @@ class _CalendarpageState extends State<Calendarpage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _events.length,
-              itemBuilder: (context, index) {
-                final date = _events.keys.elementAt(index);
-                final appointments = _events[date]!;
-                return buildAppointmentCard(date, appointments);
+            const SizedBox(height: 5),
+            FutureBuilder<List<AppointmentModel>>(
+              future: futureAppointmentWait,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('ไม่มีข้อมูล'));
+                } else {
+                  return SizedBox(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final appointment = snapshot.data![index];
+                        final String imageUrl =
+                            'https://appt-cis.smt-online.com/api/public/${appointment.imageProfile}';
+                        DateTime date = DateTime.parse('${appointment.date}');
+                        String formattedDate =
+                            DateFormat('dd-MM-yyyy').format(date);
+                        DateTime time_start = DateTime.parse(
+                            '1970-01-01 ${appointment.timeStart}');
+                        String formattedTime_start =
+                            DateFormat('HH.mm').format(time_start);
+                        DateTime time_end =
+                            DateTime.parse('1970-01-01 ${appointment.timeEnd}');
+                        String formattedTime_end =
+                            DateFormat('HH.mm').format(time_end);
+
+                        return Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 2.0,
+                                  blurRadius: 8.0,
+                                  offset: const Offset(0.0, 1.0),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 60,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: Color.fromARGB(
+                                                  255, 238, 237, 237),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              child: Image.network(
+                                                imageUrl,
+                                                headers: {
+                                                  'Authorization': 'Bearer ' +
+                                                      globals.jwtToken,
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 15),
+                                          SizedBox(
+                                            width: 230,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${appointment.prefix} ${appointment.firstName} ${appointment.lastName}",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  maxLines: 1,
+                                                ),
+                                                const SizedBox(height: 2),
+                                                Text(
+                                                  "วันที่: $formattedDate",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "เวลา: $formattedTime_start - $formattedTime_end น.",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 2),
+                                                Text(
+                                                  "เรื่อง: ${appointment.title}",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 2),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Divider(),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "สถานะ: ",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Text(
+                                                "รอวันนัดหมาย",
+                                                style: const TextStyle(
+                                                  color: Colors.blue,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'ระดับความสำคัญ: ',
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              Text(
+                                                appointment.priorityLevel == 0
+                                                    ? 'ปกติ'
+                                                    : appointment
+                                                                .priorityLevel ==
+                                                            1
+                                                        ? 'เร่งด่วน'
+                                                        : '',
+                                                style: TextStyle(
+                                                  color: appointment
+                                                              .priorityLevel ==
+                                                          0
+                                                      ? Colors.black
+                                                      : appointment
+                                                                  .priorityLevel ==
+                                                              1
+                                                          ? Colors.blue
+                                                          : Colors.black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: 35,
+                                        width: 110,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: const Color.fromARGB(
+                                                255, 13, 187, 158),
+                                          ),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CalendarDetail(appointment
+                                                        .appointmentId),
+                                              ),
+                                            );
+                                          },
+                                          child: const Center(
+                                            child: Text(
+                                              "ข้อมูลเพิ่มเติม",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromARGB(
+                                                    255, 13, 187, 158),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
               },
-            ),
-            const SizedBox(
-              height: 70,
             ),
           ],
         ),
       ),
     );
   }
-
-  Widget buildAppointmentCard(DateTime date, List<String> appointments) {
-    List<String> teachers = [
-      "อาจารย์อัจฉรา นามบุรี",
-      "อาจารย์จารุวัฒน์ ไพใหล",
-      "อาจารย์จักรนรินทร์ คงเจริญ",
-    ];
-    List<String> students = [
-      "นายสุเมธ มณีจันทรา",
-      "นายธรรมนูญ เหมือนสิงห์",
-      "นายปิติภัทร มะลิทอง",
-    ];
-    String status = "รอนัดหมาย";
-    List<String> appointmentDates = [
-      "16 มกราคม 2567",
-      "20 กุมภาพันธ์ 2567",
-      "3 มีนาคม 2567",
-    ];
-    List<String> timeStarts = [
-      "9.00",
-      "15.00",
-      "7.30",
-    ];
-    List<String> timeEnds = [
-      "12.00",
-      "16.00",
-      "10.30",
-    ];
-    List<String> images = [
-      "assets/images/teacher1.jpg",
-      "assets/images/teacher2.jpg",
-      "assets/images/teacher3.jpg",
-      "assets/images/std1.jpg",
-    ];
-    List<String> priority = [
-      "ปกติ",
-      "เร่งด่วน",
-      "ปกติ",
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        for (int i = 0; i < appointments.length; i++) ...[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 2.0,
-                      blurRadius: 8.0,
-                      offset: const Offset(0.0, 1.0),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Color.fromARGB(255, 238, 237, 237),
-                                  // boxShadow: [
-                                  //   BoxShadow(
-                                  //     color: Color.fromARGB(255, 170, 170, 170),
-                                  //     blurRadius: 10,
-                                  //     offset: Offset(0, 5),
-                                  //   )
-                                  // ]
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Image.asset(
-                                    images[i ~/ 2],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              SizedBox(
-                                width: 230,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      child: Text(
-                                        teachers[i ~/ 2],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    SizedBox(
-                                      child: Text(
-                                        "วันที่: ${appointmentDates[i]}",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      child: Text(
-                                        "เวลา: ${timeStarts[i]} - ${timeEnds[i]} น.",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    SizedBox(
-                                      child: Text(
-                                        "เรื่อง: ${appointments[i]}",
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Divider(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "สถานะ: ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Text(
-                                    "$status",
-                                    style: const TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'ความสำคัญ: ${priority[i]}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          ),
-                          Container(
-                            height: 35,
-                            width: 110,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color.fromARGB(255, 13, 187, 158),
-                              ),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CalendarDetail(),
-                                  ),
-                                );
-                              },
-                              child: const Center(
-                                child: Text(
-                                  "ข้อมูลเพิ่มเติม",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 13, 187, 158),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  // Widget buildSingleAppointmentCard(String appointment) {
-  //   List<String> teacher = [
-  //     "อาจารย์อัจฉรา นามบุรี",
-  //     "อาจารย์จักรนรินทร์ คงเจริญ",
-  //     "อาจารย์จารุวัฒน์ ไพลไหล"
-  //   ];
-  //   String status = "รอนัดหมาย";
-  //   String topic = appointment;
-
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 10),
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         color: Colors.white,
-  //         borderRadius: BorderRadius.circular(10.0),
-  //         boxShadow: [
-  //           BoxShadow(
-  //             color: Colors.black.withOpacity(0.1),
-  //             spreadRadius: 2.0,
-  //             blurRadius: 8.0,
-  //             offset: const Offset(0.0, 1.0),
-  //           ),
-  //         ],
-  //       ),
-  //       child: Padding(
-  //         padding: const EdgeInsets.all(15.0),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Row(
-  //                   children: [
-  //                     Image.asset(
-  //                       "assets/images/teacher.png",
-  //                       height: 60,
-  //                       width: 60,
-  //                     ),
-  //                     const SizedBox(
-  //                       width: 15,
-  //                     ),
-  //                     Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.start,
-  //                       children: [
-  //                         Text(
-  //                           teacher[1],
-  //                           style: const TextStyle(
-  //                             color: Colors.black,
-  //                             fontSize: 16,
-  //                             fontWeight: FontWeight.bold,
-  //                           ),
-  //                         ),
-  //                         const SizedBox(height: 2),
-  //                         const Text(
-  //                           "16 มกราคม 2567 | 10.30-11.20 น.",
-  //                           style: TextStyle(
-  //                             color: Colors.black,
-  //                             fontSize: 14,
-  //                           ),
-  //                         ),
-  //                         const SizedBox(height: 2),
-  //                         SizedBox(
-  //                           width: 200,
-  //                           child: Text(
-  //                             "เรื่อง: $topic",
-  //                             style: const TextStyle(
-  //                               color: Colors.black,
-  //                               fontSize: 16,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(height: 2),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ],
-  //             ),
-  //             const SizedBox(height: 5),
-  //             const Divider(
-  //               color: Color.fromARGB(255, 13, 187, 158),
-  //             ),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Row(
-  //                   children: [
-  //                     const Text(
-  //                       "สถานะ ",
-  //                       style: TextStyle(
-  //                         color: Colors.black,
-  //                         fontSize: 16,
-  //                       ),
-  //                     ),
-  //                     Text(
-  //                       "$status",
-  //                       style: const TextStyle(
-  //                         color: Color.fromARGB(255, 206, 158, 0),
-  //                         fontSize: 16,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Container(
-  //                   height: 35,
-  //                   width: 110,
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     border: Border.all(
-  //                       color: const Color.fromARGB(255, 13, 187, 158),
-  //                     ),
-  //                   ),
-  //                   child: InkWell(
-  //                     onTap: () {
-  //                       Navigator.push(
-  //                         context,
-  //                         MaterialPageRoute(
-  //                           builder: (context) => const CalendarDetail(),
-  //                         ),
-  //                       );
-  //                     },
-  //                     child: const Center(
-  //                       child: Text(
-  //                         "ข้อมูลเพิ่มเติม",
-  //                         style: TextStyle(
-  //                           fontSize: 16,
-  //                           fontWeight: FontWeight.bold,
-  //                           color: Color.fromARGB(255, 13, 187, 158),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             )
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   String _getThaiMonthName(int month) {
     switch (month) {
