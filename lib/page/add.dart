@@ -44,6 +44,7 @@ class _AddState extends State<Add> {
   String? _selectedRoom;
   int? _selectedUser_id;
   String? selectedCourse;
+  String? selectedYear;
 
   @override
   void initState() {
@@ -915,37 +916,24 @@ class _AddState extends State<Add> {
             } else {
               final userStudents = userSnapshot.data!;
 
-              DateTime currentDate = DateTime.now();
-              int resultDate = convertDateToValue(currentDate);
-              DateTime currentYear = DateTime.now();
-              int resultYear = convertYearToValue(currentYear.year);
-              // print(resultDate);
-              // print(resultYear);
-              ListView.builder(
-                itemCount: userStudents.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                        '${userStudents[index].prefix}${userStudents[index].firstName} ${userStudents[index].lastName}'),
-                    onTap: () {
-                      // เมื่อผู้ใช้เลือกอาจารย์
-                      // ใส่ชื่ออาจารย์ที่เลือกใน TextField
-                      setState(() {
-                        // สมมติว่าเมื่อเลือกอาจารย์แล้ว คุณต้องการให้ชื่ออาจารย์ปรากฏใน TextField
-                        // จะให้ใช้ตัวแปร _selectedTeacher เก็บข้อมูลอาจารย์ที่เลือก
-                        _selectedStudent = userStudents[index];
-                        // _textEditingController.text =
-                        //     '${_selectedTeacher.prefix} ${_selectedTeacher.firstName} ${_selectedTeacher.lastName}';
-                      });
-                    },
-                  );
-                },
-              );
               return Form(
                 key: _appointmentform,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Text(
+                          'กรุณาเลือกหลักสูตรและชั้นปีก่อนค้นหาชื่อ',
+                          style: GoogleFonts.kanit(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                     Row(
                       children: [
                         Text(
@@ -963,10 +951,7 @@ class _AddState extends State<Add> {
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedCourse = newValue;
-                          filteredStudents = userStudents
-                              .where((student) =>
-                                  student.courseId.toString() == selectedCourse)
-                              .toList();
+                          _filterStudents(userStudents);
                         });
                       },
                       items: [
@@ -984,30 +969,66 @@ class _AddState extends State<Add> {
                     Row(
                       children: [
                         Text(
-                          'เลือกนิสิตที่ต้องการเข้าพบ',
+                          'เลือกชั้นปี',
                           style: TextStyle(
                             fontSize: 18,
-                            // color: Colors.black.withOpacity(0.5),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 5,
+                    const SizedBox(height: 5),
+                    DropdownButton<String>(
+                      hint: Text('เลือกชั้นปี'),
+                      value: selectedYear,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedYear = newValue;
+                          _filterStudents(userStudents);
+                        });
+                      },
+                      items: [
+                        DropdownMenuItem<String>(
+                          value: '64',
+                          child: Text('ปี 4'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: '65',
+                          child: Text('ปี 3'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: '66',
+                          child: Text('ปี 2'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: '67',
+                          child: Text('ปี 1'),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          'เลือกนิสิตที่ต้องการเข้าพบ',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
                     Autocomplete<String>(
                       optionsBuilder: (TextEditingValue textEditingValue) {
                         if (textEditingValue.text.isEmpty) {
                           return const Iterable<String>.empty();
                         }
                         return filteredStudents
-                            .where(
-                              (user) => '${user.firstName} ${user.lastName}'
-                                  .toLowerCase()
-                                  .contains(
-                                    textEditingValue.text.toLowerCase(),
-                                  ),
-                            )
+                            .where((user) =>
+                                '${user.firstName} ${user.lastName}'
+                                    .toLowerCase()
+                                    .contains(
+                                      textEditingValue.text.toLowerCase(),
+                                    ))
                             .map((user) =>
                                 '${user.prefix} ${user.firstName} ${user.lastName}')
                             .toList();
@@ -1020,7 +1041,7 @@ class _AddState extends State<Add> {
                         );
 
                         setState(() {
-                          _selectedName = selection;
+                          _selectedStudent = selectedStudent;
                           _selectedUser_id = selectedStudent.id;
                         });
                       },
@@ -1495,26 +1516,26 @@ class _AddState extends State<Add> {
                             //     color: Colors.deepPurple,
                             //   ),
                             // );
-                            // print('user_id: ${widget.user_id}');
-                            // print('target_id: ${_selectedUser_id}');
-                            // if (_selectedTitleIndex == 1 ||
-                            //     _selectedTitleIndex == 2) {
-                            //   print('title: ${selectedTitleText}');
-                            // } else {
-                            //   print('title: ${_otherTitleController.text}');
-                            // }
-                            // print(
-                            //     'title_detail: ${_detailTitleController.text}');
+                            print('user_id: ${widget.user_id}');
+                            print('target_id: ${_selectedUser_id}');
+                            if (_selectedTitleIndex == 1 ||
+                                _selectedTitleIndex == 2) {
+                              print('title: ${selectedTitleText}');
+                            } else {
+                              print('title: ${_otherTitleController.text}');
+                            }
+                            print(
+                                'title_detail: ${_detailTitleController.text}');
 
-                            // print('strattime: $strattime');
-                            // print('endtime: $endtime');
+                            print('strattime: $strattime');
+                            print('endtime: $endtime');
 
-                            // if (_selectedRoomIndex == 1) {
-                            //   print('room: ${selectedRoomText}');
-                            // } else {
-                            //   print('room: ${_RoomController.text}');
-                            // }
-                            // print('priority_level: ${status}');
+                            if (_selectedRoomIndex == 1) {
+                              print('room: ${selectedRoomText}');
+                            } else {
+                              print('room: ${_RoomController.text}');
+                            }
+                            print('priority_level: ${status}');
                           },
                           child: const Center(
                             child: Text(
@@ -1539,6 +1560,34 @@ class _AddState extends State<Add> {
         ),
       ),
     );
+  }
+
+  void _filterStudents(List<UserStudentModel> userStudents) {
+    if (selectedCourse != null && selectedYear != null) {
+      setState(() {
+        filteredStudents = userStudents
+            .where((student) =>
+                student.courseId.toString() == selectedCourse &&
+                student.studentId.startsWith(selectedYear!))
+            .toList();
+      });
+    } else if (selectedCourse != null) {
+      setState(() {
+        filteredStudents = userStudents
+            .where((student) => student.courseId.toString() == selectedCourse)
+            .toList();
+      });
+    } else if (selectedYear != null) {
+      setState(() {
+        filteredStudents = userStudents
+            .where((student) => student.studentId.startsWith(selectedYear!))
+            .toList();
+      });
+    } else {
+      setState(() {
+        filteredStudents = userStudents;
+      });
+    }
   }
 }
 

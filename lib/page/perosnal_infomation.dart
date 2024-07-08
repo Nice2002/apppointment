@@ -53,7 +53,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.43,
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(12),
@@ -242,6 +242,49 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           SizedBox(
                             child: Text(
                               "${widget.courseName}",
+                              style: GoogleFonts.kanit(
+                                textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox(),
+                widget.roleUser == 0
+                    ? SizedBox(
+                        height: 20,
+                      )
+                    : SizedBox(),
+                widget.roleUser == 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "ชั้นปี: ",
+                            style: GoogleFonts.kanit(
+                              textStyle: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            child: Text(
+                              widget.studentId?.startsWith('64') == true
+                                  ? "ปี 4"
+                                  : widget.studentId?.startsWith('65') == true
+                                      ? "ปี 3"
+                                      : widget.studentId?.startsWith('66') ==
+                                              true
+                                          ? "ปี 2"
+                                          : widget.studentId
+                                                      ?.startsWith('67') ==
+                                                  true
+                                              ? "ปี 1"
+                                              : "ไม่ทราบชั้นปี",
                               style: GoogleFonts.kanit(
                                 textStyle: const TextStyle(
                                   fontSize: 16,
