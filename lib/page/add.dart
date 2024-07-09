@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:apppointment/api/appointment_calendar.dart';
 import 'package:apppointment/api/appointment_insert_api.dart';
 import 'package:apppointment/api/convrnirnt_day_api.dart';
 import 'package:apppointment/api/user_api.dart';
@@ -34,6 +35,8 @@ class _AddState extends State<Add> {
   late Future<List<UserTeacherModel>> futureUserTeacher;
   late Future<List<UserStudentModel>> futureUserStudent;
   late Future<List<ConvenientDayModel>>? futureConvenientDay;
+  late Future<List<AppointmentCalendarModel>> futureAppointmentCalendar_1;
+  late Future<List<AppointmentCalendarModel>> futureAppointmentCalendar_2;
   List<UserStudentModel> filteredStudents = [];
 
   final _appointmentform = GlobalKey<FormState>();
@@ -53,6 +56,8 @@ class _AddState extends State<Add> {
     futureUserTeacher = fetchUserTeacher();
     futureUserStudent = fetchUserStudent();
     futureConvenientDay = null;
+    futureAppointmentCalendar_1 = fetchAppointmentCalendar(widget.user_id);
+    futureAppointmentCalendar_2 = fetchAppointmentCalendar(_selectedUser_id);
   }
 
   TextEditingController _textEditingController = TextEditingController();
@@ -103,7 +108,7 @@ class _AddState extends State<Add> {
     });
   }
 
-  bool _isWeekend(
+  bool _isWeekend(List<AppointmentCalendarModel> appointmentCalendar,
       List<ConvenientDayModel> convenientDays, DateTime day, DateTime today) {
     // เช็คว่าเป็นวันสุดสัปดาห์หรือไม่ (วันเสาร์หรือวันอาทิตย์)
     if (day.weekday == DateTime.saturday || day.weekday == DateTime.sunday) {
@@ -117,6 +122,8 @@ class _AddState extends State<Add> {
         .any((convenientDay) => convenientDay.day == day.weekday)) {
       return false; // วันนี้ไม่ว่าง
     }
+
+    // if(appointmentCalendar.any(appointmentCalendar) => appointmentCalendar)
     return true;
   }
 
@@ -143,7 +150,6 @@ class _AddState extends State<Add> {
   }
 
   bool _isWeekendStudent(DateTime day, DateTime today) {
-    // เช็คว่าเป็นวันสุดสัปดาห์หรือไม่ (วันเสาร์หรือวันอาทิตย์)
     if (day.weekday == DateTime.saturday || day.weekday == DateTime.sunday) {
       return true;
     }
@@ -637,96 +643,148 @@ class _AddState extends State<Add> {
                           );
                         } else if (!convenientSnapshot.hasData) {
                           return Center(
-                              child:
-                                  Text('กรุณาเลือกอาจารย์ที่อยากนัดหมายก่อน'));
+                            child: Text('กรุณาเลือกอาจารย์ที่อยากนัดหมายก่อน'),
+                          );
                         } else {
                           final List<ConvenientDayModel> convenientDays =
                               convenientSnapshot.data!;
-                          return Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: Colors.black.withOpacity(0.5)),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      spreadRadius: 2.0,
-                                      blurRadius: 5.0,
-                                      offset: const Offset(0.0, 1.0),
+                          return FutureBuilder<List<AppointmentCalendarModel>>(
+                            future: futureAppointmentCalendar_1,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child:
+                                      Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                );
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Center(child: Text('ไม่มีข้อมูล'));
+                              } else {
+                                List<AppointmentCalendarModel>
+                                    appointmentCalendar = snapshot.data!;
+                                List<DateTime> dates = appointmentCalendar
+                                    .map((appointment) => appointment.date)
+                                    .toList();
+
+                                // พิมพ์วันที่และเวลาของนัดหมายทั้งหมด
+                                dates.forEach((date) {
+                                  print(DateFormat('dd-MM-yyyy HH:mm')
+                                      .format(date));
+                                });
+
+                                // ตัวอย่างการ format วันที่แรก
+                                String formattedDate = DateFormat('dd-MM-yyyy')
+                                    .format(dates.first);
+                                print('Formatted Date: $formattedDate');
+
+                                return Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.1),
+                                            spreadRadius: 2.0,
+                                            blurRadius: 5.0,
+                                            offset: const Offset(0.0, 1.0),
+                                          ),
+                                        ],
+                                      ),
+                                      child: TableCalendar<String>(
+                                        headerStyle: const HeaderStyle(
+                                          formatButtonVisible: false,
+                                          titleCentered: true,
+                                        ),
+                                        rowHeight: 45,
+                                        availableGestures:
+                                            AvailableGestures.all,
+                                        focusedDay: DateTime.now(),
+                                        firstDay: DateTime.utc(2010, 10, 16),
+                                        lastDay: DateTime.utc(2030, 3, 14),
+                                        selectedDayPredicate: (day) =>
+                                            isSameDay(day, _selectedDay),
+                                        calendarStyle: const CalendarStyle(
+                                          outsideDaysVisible: false,
+                                        ),
+                                        onDaySelected:
+                                            (selectedDay, focusedDay) {
+                                          _onDaySelected(convenientDays,
+                                              selectedDay, focusedDay);
+                                        },
+                                        enabledDayPredicate: (day) {
+                                          // Check if the day is in the dates list (appointment dates)
+                                          bool isInAppointmentDates = dates.any(
+                                              (date) => isSameDay(date, day));
+
+                                          // Check if the day is a weekend
+                                          bool isWeekend = _isWeekend(
+                                              appointmentCalendar,
+                                              convenientDays,
+                                              day,
+                                              DateTime.now());
+
+                                          // Return true if the day is not in the appointment dates list and is not a weekend
+                                          return !isInAppointmentDates &&
+                                              !isWeekend;
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Divider(),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ช่วงเวลา',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        _buildDropdown(
+                                          strattime ?? 'เลือกเวลาเริ่ม',
+                                          _startTimes,
+                                          (newValue) {
+                                            setState(() {
+                                              strattime = newValue;
+                                              print(strattime);
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                          'ถึง',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        _buildDropdown(
+                                          endtime ?? 'เลือกเวลาจบ',
+                                          _endTimes,
+                                          (newValue) {
+                                            setState(() {
+                                              endtime = newValue;
+                                              print(endtime);
+                                            });
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
-                                ),
-                                child: TableCalendar<String>(
-                                  headerStyle: const HeaderStyle(
-                                    formatButtonVisible: false,
-                                    titleCentered: true,
-                                  ),
-                                  rowHeight: 45,
-                                  availableGestures: AvailableGestures.all,
-                                  focusedDay: DateTime.now(),
-                                  firstDay: DateTime.utc(2010, 10, 16),
-                                  lastDay: DateTime.utc(2030, 3, 14),
-                                  selectedDayPredicate: (day) =>
-                                      isSameDay(day, _selectedDay),
-                                  calendarStyle: const CalendarStyle(
-                                      outsideDaysVisible: false),
-                                  onDaySelected: (selectedDay, focusedDay) {
-                                    _onDaySelected(convenientDays, selectedDay,
-                                        focusedDay);
-                                  },
-                                  enabledDayPredicate: (day) => !_isWeekend(
-                                    convenientDays,
-                                    day,
-                                    DateTime.now(),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Divider(),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Text(
-                                    'ช่วงเวลา',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _buildDropdown(
-                                    strattime ?? 'เลือกเวลาเริ่ม',
-                                    _startTimes,
-                                    (newValue) {
-                                      setState(() {
-                                        strattime = newValue;
-                                        print(strattime);
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    'ถึง',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  _buildDropdown(
-                                    endtime ?? 'เลือกเวลาจบ',
-                                    _endTimes,
-                                    (newValue) {
-                                      setState(() {
-                                        endtime = newValue;
-                                        print(endtime);
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                                );
+                              }
+                            },
                           );
                         }
                       },
@@ -1257,86 +1315,135 @@ class _AddState extends State<Add> {
                     const SizedBox(
                       height: 5,
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                                color: Colors.black.withOpacity(0.5)),
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 2.0,
-                                blurRadius: 5.0,
-                                offset: const Offset(0.0, 1.0),
+                    FutureBuilder<List<AppointmentCalendarModel>>(
+                      future: futureAppointmentCalendar_1,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('ไม่มีข้อมูล'));
+                        } else {
+                          List<AppointmentCalendarModel> appointmentCalendar =
+                              snapshot.data!;
+                          List<DateTime> dates = appointmentCalendar
+                              .map((appointment) => appointment.date)
+                              .toList();
+
+                          // พิมพ์วันที่และเวลาของนัดหมายทั้งหมด
+                          dates.forEach((date) {
+                            print(DateFormat('dd-MM-yyyy HH:mm').format(date));
+                          });
+
+                          // ตัวอย่างการ format วันที่แรก
+                          String formattedDate =
+                              DateFormat('dd-MM-yyyy').format(dates.first);
+                          print('Formatted Date: $formattedDate');
+                          return Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.5)),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 2.0,
+                                      blurRadius: 5.0,
+                                      offset: const Offset(0.0, 1.0),
+                                    ),
+                                  ],
+                                ),
+                                child: TableCalendar<String>(
+                                  headerStyle: const HeaderStyle(
+                                    formatButtonVisible: false,
+                                    titleCentered: true,
+                                  ),
+                                  rowHeight: 45,
+                                  availableGestures: AvailableGestures.all,
+                                  focusedDay: DateTime.now(),
+                                  firstDay: DateTime.utc(2010, 10, 16),
+                                  lastDay: DateTime.utc(2030, 3, 14),
+                                  selectedDayPredicate: (day) =>
+                                      isSameDay(day, _selectedDay),
+                                  calendarStyle: const CalendarStyle(
+                                      outsideDaysVisible: false),
+                                  onDaySelected: (selectedDay, focusedDay) {
+                                    _onDaySelectedStudent(
+                                        selectedDay, focusedDay);
+                                  },
+                                  enabledDayPredicate: (day) {
+                                    // Check if the day is in the dates list (appointment dates)
+                                    bool isInAppointmentDates = dates
+                                        .any((date) => isSameDay(date, day));
+
+                                    // Check if the day is a weekend
+                                    bool isWeekend = _isWeekendStudent(
+                                      day,
+                                      DateTime.now(),
+                                    );
+
+                                    // Return true if the day is not in the appointment dates list and is not a weekend
+                                    return !isInAppointmentDates && !isWeekend;
+                                  },
+                                  // enabledDayPredicate: (day) =>
+                                  //     !_isWeekendStudent(
+                                  //   day,
+                                  //   DateTime.now(),
+                                  // ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Divider(),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text(
+                                    'ช่วงเวลา',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _buildDropdown(
+                                    strattime ?? 'เลือกเวลาเริ่ม',
+                                    _startTimes_2,
+                                    (newValue) {
+                                      setState(() {
+                                        strattime = newValue;
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    'ถึง',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  _buildDropdown(
+                                    endtime ?? 'เลือกเวลาจบ',
+                                    _endTimes_2,
+                                    (newValue) {
+                                      setState(() {
+                                        endtime = newValue;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                          child: TableCalendar<String>(
-                            headerStyle: const HeaderStyle(
-                              formatButtonVisible: false,
-                              titleCentered: true,
-                            ),
-                            rowHeight: 45,
-                            availableGestures: AvailableGestures.all,
-                            focusedDay: DateTime.now(),
-                            firstDay: DateTime.utc(2010, 10, 16),
-                            lastDay: DateTime.utc(2030, 3, 14),
-                            selectedDayPredicate: (day) =>
-                                isSameDay(day, _selectedDay),
-                            calendarStyle:
-                                const CalendarStyle(outsideDaysVisible: false),
-                            onDaySelected: (selectedDay, focusedDay) {
-                              _onDaySelectedStudent(selectedDay, focusedDay);
-                            },
-                            enabledDayPredicate: (day) => !_isWeekendStudent(
-                              day,
-                              DateTime.now(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Divider(),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text(
-                              'ช่วงเวลา',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _buildDropdown(
-                              strattime ?? 'เลือกเวลาเริ่ม',
-                              _startTimes_2,
-                              (newValue) {
-                                setState(() {
-                                  strattime = newValue;
-                                });
-                              },
-                            ),
-                            Text(
-                              'ถึง',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            _buildDropdown(
-                              endtime ?? 'เลือกเวลาจบ',
-                              _endTimes_2,
-                              (newValue) {
-                                setState(() {
-                                  endtime = newValue;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                          );
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 10,
