@@ -8,6 +8,7 @@ import 'package:apppointment/api/user_student_api.dart';
 import 'package:apppointment/api/user_teacher_api.dart';
 import 'package:apppointment/page/dialog_link.dart';
 import 'package:apppointment/page/webview_page.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cr_calendar/cr_calendar.dart';
 import 'package:flutter/material.dart';
@@ -65,9 +66,9 @@ class _AddState extends State<Add> {
   int convertDateToValue(DateTime date) {
     // ตรวจสอบว่าวันที่อยู่ในช่วงใดและให้ค่าตามเงื่อนไข
     if (date.month <= 6) {
-      return 1;
-    } else {
       return 2;
+    } else {
+      return 1;
     }
   }
 
@@ -80,6 +81,10 @@ class _AddState extends State<Add> {
   DateTime? _selectedDay;
   List<String> _startTimes = [];
   List<String> _endTimes = [];
+  Map<DateTime, TimeOfDay?> TimeStartControllers =
+      {}; // Map to store start times for each day
+  Map<DateTime, TimeOfDay?> TimeEndControllers =
+      {}; // Map to store end times for each day
   List<ConvenientDayModel> convenientDays = [];
 
   List<String> _startTimes_2 = ['08:00', '09:00', '10:00'];
@@ -228,14 +233,47 @@ class _AddState extends State<Add> {
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDay!);
 
-    String strattimeString = "2024-05-21 $strattime";
-    String endtimeString = "2024-05-21 $endtime";
+    String formatTimeOfDay(TimeOfDay timeOfDay) {
+      final now = DateTime.now();
+      final dateTime = DateTime(
+          now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+      return DateFormat('hh:mm a').format(dateTime);
+    }
 
-    DateTime strattimes = DateTime.parse(strattimeString);
-    DateTime endtimes = DateTime.parse(endtimeString);
+    String? formattedTimeStart;
+    String? formattedTimeEnd;
 
-    final time_start = DateFormat('hh:mm a').format(strattimes);
-    final time_end = DateFormat('hh:mm a').format(endtimes);
+    TimeStartControllers.forEach((key, timeOfDay) {
+      if (timeOfDay != null) {
+        // ตรวจสอบว่า timeOfDay ไม่ใช่ null
+        formattedTimeStart = formatTimeOfDay(timeOfDay);
+        print('Formatted time: $formattedTimeStart');
+      } else {
+        print('Time is null for key: $key');
+      }
+    });
+
+    TimeEndControllers.forEach((key, timeOfDay) {
+      if (timeOfDay != null) {
+        // ตรวจสอบว่า timeOfDay ไม่ใช่ null
+        formattedTimeEnd = formatTimeOfDay(timeOfDay);
+        print('Formatted time: $formattedTimeEnd');
+      } else {
+        print('Time is null for key: $key');
+      }
+    });
+
+    print(formattedTimeStart);
+    print(formattedTimeEnd);
+
+    // String strattimeString = "2024-05-21 $strattime";
+    // String endtimeString = "2024-05-21 $endtime";
+
+    // DateTime strattimes = DateTime.parse(strattimeString);
+    // DateTime endtimes = DateTime.parse(endtimeString);
+
+    // final time_start = DateFormat('hh:mm a').format(strattimes);
+    // final time_end = DateFormat('hh:mm a').format(endtimes);
 
     final url =
         Uri.parse('https://appt-cis.smt-online.com/api/appointment/insert');
@@ -250,8 +288,8 @@ class _AddState extends State<Add> {
       'appointments': [
         {
           'date': formattedDate,
-          'time_start': time_start,
-          'time_end': time_end,
+          'time_start': formattedTimeStart,
+          'time_end': formattedTimeEnd,
         }
       ],
       'title': title,
@@ -310,6 +348,7 @@ class _AddState extends State<Add> {
               final userTeachers = userSnapshot.data!;
               DateTime currentDate = DateTime.now();
               int resultDate = convertDateToValue(currentDate);
+              // int resultDate = 1;
               DateTime currentYear = DateTime.now();
               int resultYear = convertYearToValue(currentYear.year);
               // print(resultDate);
@@ -528,6 +567,12 @@ class _AddState extends State<Add> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกเรื่อง';
+                                }
+                                return null;
+                              },
                               controller:
                                   _otherTitleController, // ใช้ TextEditingController
                               decoration: InputDecoration(
@@ -585,6 +630,12 @@ class _AddState extends State<Add> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15, right: 15),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกรายระเอียด';
+                              }
+                              return null;
+                            },
                             controller: _detailTitleController,
                             maxLines: 6,
                             maxLength: 150,
@@ -670,16 +721,117 @@ class _AddState extends State<Add> {
                                     .map((appointment) => appointment.date)
                                     .toList();
 
-                                // พิมพ์วันที่และเวลาของนัดหมายทั้งหมด
-                                dates.forEach((date) {
-                                  print(DateFormat('dd-MM-yyyy HH:mm')
-                                      .format(date));
-                                });
+                                // Log the dates to the console
+                                print('Appointment Dates:');
+                                dates.forEach((date) => print(date));
 
-                                // ตัวอย่างการ format วันที่แรก
-                                String formattedDate = DateFormat('dd-MM-yyyy')
-                                    .format(dates.first);
-                                print('Formatted Date: $formattedDate');
+                                // Continue with the rest of your code
+                                ConvenientDayModel? selectedConvenientDay;
+                                List<TimeOfDay> availableTimes = [];
+
+                                if (_selectedDay != null) {
+                                  DateTime selectedDateTime =
+                                      DateTime.parse('${_selectedDay}');
+                                  List<AppointmentCalendarModel>
+                                      appointmentsOnSelectedDay = [];
+
+                                  appointmentCalendar.forEach((appointment) {
+                                    DateTime appointmentDateTime =
+                                        DateTime.parse(
+                                            appointment.date.toString());
+
+                                    if (isSameDay(appointmentDateTime,
+                                        selectedDateTime)) {
+                                      appointmentsOnSelectedDay
+                                          .add(appointment);
+                                    }
+                                  });
+
+                                  TimeOfDay startOfDay =
+                                      TimeOfDay(hour: 8, minute: 0);
+                                  TimeOfDay endOfDay =
+                                      TimeOfDay(hour: 17, minute: 0);
+
+                                  for (var time = startOfDay;
+                                      time.hour < endOfDay.hour;
+                                      time = TimeOfDay(
+                                          hour: time.hour + 1, minute: 0)) {
+                                    availableTimes.add(time);
+                                  }
+
+                                  appointmentsOnSelectedDay
+                                      .forEach((appointment) {
+                                    TimeOfDay appointmentStartTime =
+                                        TimeOfDay.fromDateTime(DateFormat.Hms()
+                                            .parse(appointment.timeStart));
+                                    TimeOfDay appointmentEndTime =
+                                        TimeOfDay.fromDateTime(DateFormat.Hms()
+                                            .parse(appointment.timeEnd));
+
+                                    int timeOfDayToMinutes(TimeOfDay time) {
+                                      return time.hour * 60 + time.minute;
+                                    }
+
+                                    for (int i = availableTimes.length - 1;
+                                        i >= 0;
+                                        i--) {
+                                      TimeOfDay availableTime =
+                                          availableTimes[i];
+
+                                      if (timeOfDayToMinutes(availableTime) >=
+                                              timeOfDayToMinutes(
+                                                  appointmentStartTime) &&
+                                          timeOfDayToMinutes(availableTime) <
+                                              timeOfDayToMinutes(
+                                                  appointmentEndTime)) {
+                                        availableTimes.removeAt(i);
+                                      }
+                                    }
+                                  });
+
+                                  availableTimes.sort((a, b) =>
+                                      a.hour * 60 +
+                                      a.minute -
+                                      (b.hour * 60 + b.minute));
+                                }
+
+                                bool isTimeWithinAvailableTimes(
+                                    TimeOfDay startTime, TimeOfDay endTime) {
+                                  int startTimeMinutes =
+                                      startTime.hour * 60 + startTime.minute;
+                                  int endTimeMinutes =
+                                      endTime.hour * 60 + endTime.minute;
+
+                                  for (var convenient in convenientDays) {
+                                    TimeOfDay availableStartTime = TimeOfDay(
+                                      hour: int.parse(
+                                          convenient.timeStart.split(':')[0]),
+                                      minute: int.parse(
+                                          convenient.timeStart.split(':')[1]),
+                                    );
+                                    TimeOfDay availableEndTime = TimeOfDay(
+                                      hour: int.parse(
+                                          convenient.timeEnd.split(':')[0]),
+                                      minute: int.parse(
+                                          convenient.timeEnd.split(':')[1]),
+                                    );
+
+                                    int availableStartTimeMinutes =
+                                        availableStartTime.hour * 60 +
+                                            availableStartTime.minute;
+                                    int availableEndTimeMinutes =
+                                        availableEndTime.hour * 60 +
+                                            availableEndTime.minute;
+
+                                    if (startTimeMinutes >=
+                                            availableStartTimeMinutes &&
+                                        endTimeMinutes <=
+                                            availableEndTimeMinutes) {
+                                      return true;
+                                    }
+                                  }
+                                  return false;
+                                }
 
                                 return Column(
                                   children: [
@@ -722,20 +874,12 @@ class _AddState extends State<Add> {
                                               selectedDay, focusedDay);
                                         },
                                         enabledDayPredicate: (day) {
-                                          // Check if the day is in the dates list (appointment dates)
-                                          bool isInAppointmentDates = dates.any(
-                                              (date) => isSameDay(date, day));
-
-                                          // Check if the day is a weekend
                                           bool isWeekend = _isWeekend(
                                               appointmentCalendar,
                                               convenientDays,
                                               day,
                                               DateTime.now());
-
-                                          // Return true if the day is not in the appointment dates list and is not a weekend
-                                          return !isInAppointmentDates &&
-                                              !isWeekend;
+                                          return !isWeekend;
                                         },
                                       ),
                                     ),
@@ -751,33 +895,166 @@ class _AddState extends State<Add> {
                                       ],
                                     ),
                                     const SizedBox(height: 10),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('ช่วงเวลาว่างของอาจารย์'),
+                                          ],
+                                        ),
+                                        if (_selectedDay != null) ...[
+                                          for (var convenient in convenientDays)
+                                            if (convenient.day ==
+                                                _selectedDay!.weekday)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 20),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Text(
+                                                        'เวลา: ${convenient.timeStart}'),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 5),
+                                                      child: Text(" - "),
+                                                    ),
+                                                    Text(
+                                                        'เวลา: ${convenient.timeEnd}'),
+                                                  ],
+                                                ),
+                                              ),
+                                        ],
+                                        Row(
+                                          children: [
+                                            if (availableTimes.isNotEmpty) ...[
+                                              Text(
+                                                  '${availableTimes.first.format(context)} ถึง ${availableTimes.last.format(context)}'),
+                                            ] else ...[
+                                              Text('ไม่มีช่วงเวลาว่าง'),
+                                            ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        _buildDropdown(
-                                          strattime ?? 'เลือกเวลาเริ่ม',
-                                          _startTimes,
-                                          (newValue) {
-                                            setState(() {
-                                              strattime = newValue;
-                                              print(strattime);
-                                            });
-                                          },
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              DateTime? selectedDay =
+                                                  _selectedDay;
+                                              if (selectedDay != null) {
+                                                TimeOfDay? selectedStartTime =
+                                                    await showTimePicker(
+                                                  context: context,
+                                                  initialTime:
+                                                      TimeStartControllers[
+                                                              selectedDay] ??
+                                                          TimeOfDay.now(),
+                                                );
+                                                if (selectedStartTime != null) {
+                                                  setState(() {
+                                                    TimeStartControllers[
+                                                            selectedDay] =
+                                                        selectedStartTime;
+                                                  });
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        'กรุณาเลือกวันที่ก่อน'),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: InputDecorator(
+                                              decoration: InputDecoration(
+                                                labelText: 'เวลาเริ่ม',
+                                              ),
+                                              child: Text(
+                                                TimeStartControllers[
+                                                            _selectedDay]
+                                                        ?.format(context) ??
+                                                    'เลือกเวลาเริ่ม',
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        Text(
-                                          'ถึง',
-                                          style: TextStyle(fontSize: 16),
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Text(
+                                            'ถึง',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ),
-                                        _buildDropdown(
-                                          endtime ?? 'เลือกเวลาจบ',
-                                          _endTimes,
-                                          (newValue) {
-                                            setState(() {
-                                              endtime = newValue;
-                                              print(endtime);
-                                            });
-                                          },
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              DateTime? selectedDay =
+                                                  _selectedDay;
+                                              if (selectedDay != null) {
+                                                TimeOfDay? selectedEndTime =
+                                                    await showTimePicker(
+                                                  context: context,
+                                                  initialTime:
+                                                      TimeEndControllers[
+                                                              selectedDay] ??
+                                                          TimeOfDay.now(),
+                                                );
+                                                if (selectedEndTime != null) {
+                                                  if (isTimeWithinAvailableTimes(
+                                                      TimeStartControllers[
+                                                          selectedDay]!,
+                                                      selectedEndTime)) {
+                                                    setState(() {
+                                                      TimeEndControllers[
+                                                              selectedDay] =
+                                                          selectedEndTime;
+                                                    });
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            'เวลาที่เลือกอยู่นอกช่วงเวลาว่างของอาจารย์'),
+                                                      ),
+                                                    );
+                                                  }
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        'กรุณาเลือกวันที่ก่อน'),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: InputDecorator(
+                                              decoration: InputDecoration(
+                                                labelText: 'เวลาจบ',
+                                              ),
+                                              child: Text(
+                                                TimeEndControllers[_selectedDay]
+                                                        ?.format(context) ??
+                                                    'เลือกเวลาจบ',
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -839,7 +1116,7 @@ class _AddState extends State<Add> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: const Color.fromARGB(255, 13, 187, 158),
+                            color: Colors.black.withOpacity(0.5),
                           ),
                           color: Colors.white,
                           boxShadow: [
@@ -860,6 +1137,12 @@ class _AddState extends State<Add> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกห้องที่สะดวก';
+                                }
+                                return null;
+                              },
                               controller: _RoomController,
                               decoration: InputDecoration(
                                 hintText: 'กรอกห้องที่สะดวก',
@@ -927,9 +1210,76 @@ class _AddState extends State<Add> {
                         child: InkWell(
                           onTap: () async {
                             if (_appointmentform.currentState!.validate()) {
-                              AppointmentInsertModel res =
-                                  await fetchAppointmentInsert();
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.question,
+                                animType: AnimType.topSlide,
+                                showCloseIcon: true,
+                                title: "ยืนยันการขอนัดหมาย?",
+                                desc: "คุณต้องการขอนัดหมายใช่หรือไม่?",
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () async {
+                                  AppointmentInsertModel res =
+                                      await fetchAppointmentInsert();
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    animType: AnimType.topSlide,
+                                    showCloseIcon: true,
+                                    title: "ขอนัดหมายสำเร็จ",
+                                    btnOkOnPress: () {},
+                                  ).show();
+                                },
+                              ).show();
                             }
+//                             print('user_id: ${widget.user_id}');
+//                             print('target_id: ${_selectedUser_id}');
+//                             if (_selectedTitleIndex == 1 ||
+//                                 _selectedTitleIndex == 2) {
+//                               print('title: ${selectedTitleText}');
+//                             } else {
+//                               print('title: ${_otherTitleController.text}');
+//                             }
+//                             print(
+//                                 'title_detail: ${_detailTitleController.text}');
+
+// // ฟังก์ชั่นเพื่อฟอร์แมตเวลา
+//                             String formatTimeOfDay(TimeOfDay timeOfDay) {
+//                               final now = DateTime.now();
+//                               final dateTime = DateTime(now.year, now.month,
+//                                   now.day, timeOfDay.hour, timeOfDay.minute);
+//                               return DateFormat('hh:mm a').format(dateTime);
+//                             }
+
+// // ฟอร์แมตข้อมูลใน TimeStartControllers
+//                             TimeStartControllers.forEach((key, timeOfDay) {
+//                               if (timeOfDay != null) {
+//                                 // ตรวจสอบว่า timeOfDay ไม่ใช่ null
+//                                 final formattedTimeStart =
+//                                     formatTimeOfDay(timeOfDay);
+//                                 print('Formatted time: $formattedTimeStart');
+//                               } else {
+//                                 print('Time is null for key: $key');
+//                               }
+//                             });
+
+//                             TimeEndControllers.forEach((key, timeOfDay) {
+//                               if (timeOfDay != null) {
+//                                 // ตรวจสอบว่า timeOfDay ไม่ใช่ null
+//                                 final formattedTimeEnd =
+//                                     formatTimeOfDay(timeOfDay);
+//                                 print('Formatted time: $formattedTimeEnd');
+//                               } else {
+//                                 print('Time is null for key: $key');
+//                               }
+//                             });
+
+//                             if (_selectedRoomIndex == 1) {
+//                               print('room: ${selectedRoomText}');
+//                             } else {
+//                               print('room: ${_RoomController.text}');
+//                             }
+//                             print('priority_level: ${status}');
                           },
                           child: const Center(
                             child: Text(
@@ -1213,6 +1563,12 @@ class _AddState extends State<Add> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกเรื่อง';
+                                }
+                                return null;
+                              },
                               controller:
                                   _otherTitleController, // ใช้ TextEditingController
                               decoration: InputDecoration(
@@ -1270,6 +1626,12 @@ class _AddState extends State<Add> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15, right: 15),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกรายละเอียด';
+                              }
+                              return null;
+                            },
                             controller: _detailTitleController,
                             maxLines: 6,
                             maxLength: 150,
@@ -1540,6 +1902,12 @@ class _AddState extends State<Add> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกห้องที่สะดวก';
+                                }
+                                return null;
+                              },
                               controller: _RoomController,
                               decoration: InputDecoration(
                                 hintText: 'กรอกห้องที่สะดวก',
@@ -1607,22 +1975,34 @@ class _AddState extends State<Add> {
                         child: InkWell(
                           onTap: () async {
                             if (_appointmentform.currentState!.validate()) {
-                              AppointmentInsertModel res =
-                                  await fetchAppointmentInsert();
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.question,
+                                animType: AnimType.topSlide,
+                                showCloseIcon: true,
+                                title: "ยืนยันการขอนัดหมาย?",
+                                desc: "คุณต้องการขอนัดหมายใช่หรือไม่?",
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () async {
+                                  AppointmentInsertModel res =
+                                      await fetchAppointmentInsert();
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.success,
+                                    animType: AnimType.topSlide,
+                                    showCloseIcon: true,
+                                    title: "ขอนัดหมายสำเร็จ",
+                                    btnOkOnPress: () {},
+                                  ).show();
+                                },
+                              ).show();
                             }
+
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
                             //         builder: (context) => ChangePassword()));
-                            // AwesomeNotifications().createNotification(
-                            //   content: NotificationContent(
-                            //     id: 3,
-                            //     channelKey: "basic_channel",
-                            //     title: "Notification test",
-                            //     body: "Notification test",
-                            //     color: Colors.deepPurple,
-                            //   ),
-                            // );
+
                             print('user_id: ${widget.user_id}');
                             print('target_id: ${_selectedUser_id}');
                             if (_selectedTitleIndex == 1 ||

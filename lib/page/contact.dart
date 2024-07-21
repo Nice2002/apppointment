@@ -3,6 +3,9 @@ import 'package:apppointment/Colors/app_color.dart';
 import 'package:apppointment/api/contact_api.dart';
 import 'package:apppointment/api/contact_insert_api.dart';
 import 'package:apppointment/api/contact_update_api.dart';
+import 'package:apppointment/page/profile.dart';
+import 'package:apppointment/page/profile_2.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -409,16 +412,55 @@ class _ContextState extends State<Context> {
                                 child: InkWell(
                                   onTap: () async {
                                     if (_contactform.currentState!.validate()) {
-                                      if (contact.contact_id != null) {
-                                        ContactUpdateModel res =
-                                            await fetchContactUpdate(
-                                                contact.contact_id);
-                                        print(contact.contact_id);
-                                      } else {
-                                        ContactInsertModel res =
-                                            await fetchContactInsert();
-                                      }
+                                      AwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.question,
+                                        animType: AnimType.topSlide,
+                                        showCloseIcon: true,
+                                        title:
+                                            "ยืนยันการเพิ่มช่องทางการติดต่อ?",
+                                        desc:
+                                            "คุณต้องการเพิ่มช่องทางการติดต่อใช่หรือไม่?",
+                                        btnCancelOnPress: () {},
+                                        btnOkOnPress: () async {
+                                          if (contact.contact_id != null) {
+                                            ContactUpdateModel res =
+                                                await fetchContactUpdate(
+                                                    contact.contact_id);
+                                            print(contact.contact_id);
+                                          } else {
+                                            ContactInsertModel res =
+                                                await fetchContactInsert();
+                                          }
+                                          AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.success,
+                                            animType: AnimType.topSlide,
+                                            showCloseIcon: true,
+                                            title:
+                                                "เพิ่มช่องทางการติดต่อสำเร็จ",
+                                            btnOkOnPress: () {
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             ProfileScreen()));
+                                            },
+                                          ).show();
+                                        },
+                                      ).show();
                                     }
+                                    // if (_contactform.currentState!.validate()) {
+                                    //   if (contact.contact_id != null) {
+                                    //     ContactUpdateModel res =
+                                    //         await fetchContactUpdate(
+                                    //             contact.contact_id);
+                                    //     print(contact.contact_id);
+                                    //   } else {
+                                    //     ContactInsertModel res =
+                                    //         await fetchContactInsert();
+                                    //   }
+                                    // }
                                     // Navigator.push(
                                     //     context,
                                     //     MaterialPageRoute(
