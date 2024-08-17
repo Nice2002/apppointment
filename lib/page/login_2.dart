@@ -178,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
+                        obscureText: true,
                         controller: passwordController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(

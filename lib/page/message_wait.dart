@@ -463,6 +463,10 @@ class _Message_WaitState extends State<Message_Wait> {
                                                   builder: (context) =>
                                                       Message_Edit(
                                                     appointment.appointmentId,
+                                                    appointment.userId,
+                                                    appointment.roleUser,
+                                                    appointment.targetId,
+                                                    appointment.date,
                                                     appointment.title,
                                                     appointment.titleDetail,
                                                     appointment.timeStart,

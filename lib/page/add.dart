@@ -723,77 +723,78 @@ class _AddState extends State<Add> {
 
                                 // Log the dates to the console
                                 print('Appointment Dates:');
-                                dates.forEach((date) => print(date));
+                                dates.forEach((date) => print("date $date"));
 
                                 // Continue with the rest of your code
                                 ConvenientDayModel? selectedConvenientDay;
                                 List<TimeOfDay> availableTimes = [];
 
-                                if (_selectedDay != null) {
-                                  DateTime selectedDateTime =
-                                      DateTime.parse('${_selectedDay}');
-                                  List<AppointmentCalendarModel>
-                                      appointmentsOnSelectedDay = [];
+                                // if (_selectedDay != null) {
+                                //   print(_selectedDay);
+                                //   DateTime selectedDateTime =
+                                //       DateTime.parse('${_selectedDay}');
+                                //   List<AppointmentCalendarModel>
+                                //       appointmentsOnSelectedDay = [];
 
-                                  appointmentCalendar.forEach((appointment) {
-                                    DateTime appointmentDateTime =
-                                        DateTime.parse(
-                                            appointment.date.toString());
+                                //   appointmentCalendar.forEach((appointment) {
+                                //     DateTime appointmentDateTime =
+                                //         DateTime.parse(
+                                //             appointment.date.toString());
 
-                                    if (isSameDay(appointmentDateTime,
-                                        selectedDateTime)) {
-                                      appointmentsOnSelectedDay
-                                          .add(appointment);
-                                    }
-                                  });
+                                //     if (isSameDay(appointmentDateTime,
+                                //         selectedDateTime)) {
+                                //       appointmentsOnSelectedDay
+                                //           .add(appointment);
+                                //     }
+                                //   });
 
-                                  TimeOfDay startOfDay =
-                                      TimeOfDay(hour: 8, minute: 0);
-                                  TimeOfDay endOfDay =
-                                      TimeOfDay(hour: 17, minute: 0);
+                                //   TimeOfDay startOfDay =
+                                //       TimeOfDay(hour: 8, minute: 0);
+                                //   TimeOfDay endOfDay =
+                                //       TimeOfDay(hour: 17, minute: 0);
 
-                                  for (var time = startOfDay;
-                                      time.hour < endOfDay.hour;
-                                      time = TimeOfDay(
-                                          hour: time.hour + 1, minute: 0)) {
-                                    availableTimes.add(time);
-                                  }
+                                //   for (var time = startOfDay;
+                                //       time.hour < endOfDay.hour;
+                                //       time = TimeOfDay(
+                                //           hour: time.hour + 1, minute: 0)) {
+                                //     availableTimes.add(time);
+                                //   }
 
-                                  appointmentsOnSelectedDay
-                                      .forEach((appointment) {
-                                    TimeOfDay appointmentStartTime =
-                                        TimeOfDay.fromDateTime(DateFormat.Hms()
-                                            .parse(appointment.timeStart));
-                                    TimeOfDay appointmentEndTime =
-                                        TimeOfDay.fromDateTime(DateFormat.Hms()
-                                            .parse(appointment.timeEnd));
+                                //   appointmentsOnSelectedDay
+                                //       .forEach((appointment) {
+                                //     TimeOfDay appointmentStartTime =
+                                //         TimeOfDay.fromDateTime(DateFormat.Hms()
+                                //             .parse(appointment.timeStart));
+                                //     TimeOfDay appointmentEndTime =
+                                //         TimeOfDay.fromDateTime(DateFormat.Hms()
+                                //             .parse(appointment.timeEnd));
 
-                                    int timeOfDayToMinutes(TimeOfDay time) {
-                                      return time.hour * 60 + time.minute;
-                                    }
+                                //     int timeOfDayToMinutes(TimeOfDay time) {
+                                //       return time.hour * 60 + time.minute;
+                                //     }
 
-                                    for (int i = availableTimes.length - 1;
-                                        i >= 0;
-                                        i--) {
-                                      TimeOfDay availableTime =
-                                          availableTimes[i];
+                                //     for (int i = availableTimes.length - 1;
+                                //         i >= 0;
+                                //         i--) {
+                                //       TimeOfDay availableTime =
+                                //           availableTimes[i];
 
-                                      if (timeOfDayToMinutes(availableTime) >=
-                                              timeOfDayToMinutes(
-                                                  appointmentStartTime) &&
-                                          timeOfDayToMinutes(availableTime) <
-                                              timeOfDayToMinutes(
-                                                  appointmentEndTime)) {
-                                        availableTimes.removeAt(i);
-                                      }
-                                    }
-                                  });
+                                //       if (timeOfDayToMinutes(availableTime) >=
+                                //               timeOfDayToMinutes(
+                                //                   appointmentStartTime) &&
+                                //           timeOfDayToMinutes(availableTime) <
+                                //               timeOfDayToMinutes(
+                                //                   appointmentEndTime)) {
+                                //         availableTimes.removeAt(i);
+                                //       }
+                                //     }
+                                //   });
 
-                                  availableTimes.sort((a, b) =>
-                                      a.hour * 60 +
-                                      a.minute -
-                                      (b.hour * 60 + b.minute));
-                                }
+                                //   availableTimes.sort((a, b) =>
+                                //       a.hour * 60 +
+                                //       a.minute -
+                                //       (b.hour * 60 + b.minute));
+                                // }
 
                                 bool isTimeWithinAvailableTimes(
                                     TimeOfDay startTime, TimeOfDay endTime) {
@@ -931,16 +932,6 @@ class _AddState extends State<Add> {
                                                 ),
                                               ),
                                         ],
-                                        Row(
-                                          children: [
-                                            if (availableTimes.isNotEmpty) ...[
-                                              Text(
-                                                  '${availableTimes.first.format(context)} ถึง ${availableTimes.last.format(context)}'),
-                                            ] else ...[
-                                              Text('ไม่มีช่วงเวลาว่าง'),
-                                            ],
-                                          ],
-                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),

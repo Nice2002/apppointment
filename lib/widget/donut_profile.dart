@@ -135,7 +135,7 @@ class _DonutProfileState extends State<DonutProfile> {
               color: Colors.orange,
               value: count0.toDouble(),
               title:
-                  '${((count0 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
+                  '${((count0 / (count0 + count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
               radius: radius,
               titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -149,7 +149,7 @@ class _DonutProfileState extends State<DonutProfile> {
               color: Colors.blue,
               value: count1.toDouble(), // ใช้ค่า count1 ในการกำหนดค่า
               title:
-                  '${((count1 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%', // คำนวณและแสดงเปอร์เซ็นต์
+                  '${((count1 / (count0 + count1 + count2 + count3)) * 100).toStringAsFixed(1)}%', // คำนวณและแสดงเปอร์เซ็นต์
               radius: radius,
               titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -164,7 +164,7 @@ class _DonutProfileState extends State<DonutProfile> {
               color: Colors.green,
               value: count2.toDouble(),
               title:
-                  '${((count2 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
+                  '${((count2 / (count0 + count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
               radius: radius,
               titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -179,7 +179,7 @@ class _DonutProfileState extends State<DonutProfile> {
               color: Colors.red,
               value: count3.toDouble(),
               title:
-                  '${((count3 / (count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
+                  '${((count3 / (count0 + count1 + count2 + count3)) * 100).toStringAsFixed(1)}%',
               radius: radius,
               titleStyle: TextStyle(
                 fontSize: fontSize,

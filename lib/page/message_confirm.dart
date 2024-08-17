@@ -550,6 +550,10 @@ class _Message_ConfirmState extends State<Message_Confirm> {
                                                 builder: (context) =>
                                                     Message_Confirm_Edit(
                                                   appointment.appointmentId,
+                                                  appointment.userId,
+                                                  appointment.roleUser,
+                                                  appointment.targetId,
+                                                  appointment.date,
                                                   appointment.title,
                                                   appointment.titleDetail,
                                                   appointment.timeStart,
