@@ -256,8 +256,6 @@ class _Message_Confirm_EditState extends State<Message_Confirm_Edit> {
                   .map((appointment) => appointment.date)
                   .toList();
 
-              print(dates);
-
               DateTime selectedDate = widget.date;
 
               final Map<String, int> dayOfWeekMap = {
@@ -313,36 +311,15 @@ class _Message_Confirm_EditState extends State<Message_Confirm_Edit> {
                       List<String> convenientTimes = [];
 
                       if (matchingConvenientDay != null) {
-                        print("Matching day: $matchingConvenientDay");
-                        print("Time start: ${matchingConvenientDay.timeStart}");
-                        print("Time end: ${matchingConvenientDay.timeEnd}");
-
                         // Assume convenientTimes is a list of strings in "HH:mm" format
                         convenientTimes = [
                           matchingConvenientDay.timeStart,
                           matchingConvenientDay.timeEnd
                         ];
 
-                        print(
-                            "Convenient times for day $dayOfWeekEnglish: $convenientTimes");
-
                         convenientDays.clear(); // Clear previous list
 
                         if (convenientTimes.length == 2) {
-                          // Assuming convenientTimes contains two strings: timeStart and timeEnd
-                          // final startParts = convenientTimes[0].split(":");
-                          // final endParts = convenientTimes[1].split(":");
-
-                          // final timeStart = TimeOfDay(
-                          //   hour: int.parse(startParts[0]),
-                          //   minute: int.parse(startParts[1]),
-                          // );
-
-                          // final timeEnd = TimeOfDay(
-                          //   hour: int.parse(endParts[0]),
-                          //   minute: int.parse(endParts[1]),
-                          // );
-
                           // Create a ConvenientDayModel object with the given date and times
                           ConvenientDayModel convenientDay = ConvenientDayModel(
                             id: widget.user_id, // Provide a valid id
@@ -357,13 +334,7 @@ class _Message_Confirm_EditState extends State<Message_Confirm_Edit> {
                           );
 
                           convenientDays.add(convenientDay);
-                        } else {
-                          print(
-                              "ConvenientTimes should contain exactly two time strings.");
                         }
-                      } else {
-                        print(
-                            "No convenient day found for day $dayOfWeekEnglish");
                       }
 
                       return Column(

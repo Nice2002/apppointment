@@ -74,6 +74,7 @@ class _Message_WaitState extends State<Message_Wait> {
                 DateTime time_end =
                     DateTime.parse('1970-01-01 ${appointment.timeEnd}');
                 String formattedTime_end = DateFormat('HH.mm').format(time_end);
+
                 return Center(
                   child: Column(
                     children: [

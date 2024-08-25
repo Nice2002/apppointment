@@ -59,7 +59,7 @@ class _Message_EditState extends State<Message_Edit> {
   List<AppointmentCalendarModel> matchingAppointments = [];
   List<ConvenientDayModel> convenientDays = [];
 
-  get selectedCategoryIndex => null;
+  // get selectedCategoryIndex => null;
 
   @override
   void initState() {
@@ -69,29 +69,21 @@ class _Message_EditState extends State<Message_Edit> {
     roomController.text = widget.location;
     selectedStartTime = _parseTime(widget.timeStart);
     selectedEndTime = _parseTime(widget.timeEnd);
-    futureAppointmentCalendar = fetchAppointmentCalendar(widget.user_id);
+    // futureAppointmentCalendar = fetchAppointmentCalendar(widget.user_id);
+
+    print(widget.target_id);
+    print(widget.user_id);
 
     initializeDateFormatting('th_TH', null).then((_) {
       setState(() {
         futureAppointmentCalendar = fetchAppointmentCalendar(widget.user_id);
         futureConvenientDay = fetchConvenientDay(
-            widget.role_user == 0 ? widget.target_id : widget.user_id);
+            widget.role_user == 1 ? widget.target_id : widget.user_id);
       });
     });
 
-    // futureAppointmentAll = fetchAppointmentAll(widget.appointmentId);
-    // futureAppointmentAll.then((appointment) {
-    //   setState(() {
-    //     titleController.text = appointment.title ?? '';
-    //     detailTitleController.text = appointment.titleDetail ?? '';
-    //     roomController.text = appointment.location ?? '';
-    //     // อัปเดต _startTimes และ _endTimes ด้วยข้อมูลจาก appointment
-    //     _startTimes = [appointment.timeStart ?? '08:00'];
-    //     _endTimes = [appointment.timeEnd ?? '12:00'];
-    //     strattime = appointment.timeStart;
-    //     endtime = appointment.timeEnd;
-    //   });
-    // });
+    futureAppointmentCalendar = Future.value([]);
+    futureConvenientDay = Future.value([]); // Initialize with an empty list
   }
 
   @override

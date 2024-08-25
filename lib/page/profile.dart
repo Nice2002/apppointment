@@ -445,7 +445,7 @@ class _ProfileState extends State<Profile> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Context(widget.user_id, user.email)),
+                                      Contact(widget.user_id, user.email)),
                             );
                           },
                           child: Container(

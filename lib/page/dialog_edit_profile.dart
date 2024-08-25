@@ -141,7 +141,7 @@ class _Dialog_Edit_ProfileState extends State<Dialog_Edit_Profile> {
                           dialogType: DialogType.success,
                           animType: AnimType.topSlide,
                           showCloseIcon: true,
-                          title: "นัดหมายสำเร็จ",
+                          title: "เปลี่ยนรูปภาพสำเร็จ",
                           btnOkOnPress: () {},
                         ).show();
                       }

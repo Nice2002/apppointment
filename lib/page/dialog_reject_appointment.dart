@@ -152,7 +152,7 @@ class _Dialog_Reject_AppointmentState extends State<Dialog_Reject_Appointment> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 130,
+                    width: 125,
                     height: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -177,7 +177,7 @@ class _Dialog_Reject_AppointmentState extends State<Dialog_Reject_Appointment> {
                     width: 20,
                   ),
                   Container(
-                    width: 130,
+                    width: 125,
                     height: 40,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),

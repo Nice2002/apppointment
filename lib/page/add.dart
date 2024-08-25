@@ -18,6 +18,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart'; // Import the package
 
 import 'package:http/http.dart' as http;
 import '/globals.dart' as globals;
@@ -39,6 +40,9 @@ class _AddState extends State<Add> {
   late Future<List<AppointmentCalendarModel>> futureAppointmentCalendar_1;
   late Future<List<AppointmentCalendarModel>> futureAppointmentCalendar_2;
   List<UserStudentModel> filteredStudents = [];
+  List<AppointmentCalendarModel> matchingAppointments = [];
+  List<ConvenientDayModel> convenientDays = [];
+  List<ConvenientDayModel> convenientDays_ = [];
 
   final _appointmentform = GlobalKey<FormState>();
 
@@ -49,6 +53,8 @@ class _AddState extends State<Add> {
   int? _selectedUser_id;
   String? selectedCourse;
   String? selectedYear;
+  TimeOfDay? selectedStartTime;
+  TimeOfDay? selectedEndTime;
 
   @override
   void initState() {
@@ -85,7 +91,6 @@ class _AddState extends State<Add> {
       {}; // Map to store start times for each day
   Map<DateTime, TimeOfDay?> TimeEndControllers =
       {}; // Map to store end times for each day
-  List<ConvenientDayModel> convenientDays = [];
 
   List<String> _startTimes_2 = ['08:00', '09:00', '10:00'];
   List<String> _endTimes_2 = ['12:00', '13:00', '14:00'];
@@ -213,6 +218,102 @@ class _AddState extends State<Add> {
     });
   }
 
+  TimeOfDay? _parseTime(String time) {
+    try {
+      final format = DateFormat('HH:mm:ss');
+      final dateTime = format.parse(time);
+      return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+    } catch (e) {
+      print("Error parsing time: $e");
+      return null;
+    }
+  }
+
+  String _formatTimeOfDay(TimeOfDay timeOfDay) {
+    final now = DateTime.now();
+    final dateTime = DateTime(
+        now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+    return DateFormat('HH:mm:ss').format(dateTime);
+  }
+
+  bool _validateTimeRange() {
+    if (selectedStartTime != null && selectedEndTime != null) {
+      final startTimeInMinutes =
+          selectedStartTime!.hour * 60 + selectedStartTime!.minute;
+      final endTimeInMinutes =
+          selectedEndTime!.hour * 60 + selectedEndTime!.minute;
+      return endTimeInMinutes > startTimeInMinutes;
+    }
+    return false;
+  }
+
+  bool _isTimeSlotOverlapping() {
+    if (selectedStartTime != null && selectedEndTime != null) {
+      final newStartMinutes =
+          selectedStartTime!.hour * 60 + selectedStartTime!.minute;
+      final newEndMinutes =
+          selectedEndTime!.hour * 60 + selectedEndTime!.minute;
+
+      for (var appointment in matchingAppointments) {
+        // Skip the current appointment
+        // if (appointment.id == widget.appointmentId) continue;
+
+        final appointmentStartTime = _parseTime(appointment.timeStart);
+        final appointmentEndTime = _parseTime(appointment.timeEnd);
+
+        if (appointmentStartTime != null && appointmentEndTime != null) {
+          final appointmentStartMinutes =
+              appointmentStartTime.hour * 60 + appointmentStartTime.minute;
+          final appointmentEndMinutes =
+              appointmentEndTime.hour * 60 + appointmentEndTime.minute;
+
+          // Check for overlap
+          if ((newStartMinutes < appointmentEndMinutes &&
+                  newEndMinutes > appointmentStartMinutes) ||
+              (newStartMinutes == appointmentStartMinutes &&
+                  newEndMinutes == appointmentEndMinutes)) {
+            return true; // Overlap found
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  bool _isTimeWithinAvailableRange(TimeOfDay startTime, TimeOfDay endTime) {
+    print(convenientDays_);
+    if (convenientDays_.isEmpty) return false;
+
+    final startMinutes = startTime.hour * 60 + startTime.minute;
+    final endMinutes = endTime.hour * 60 + endTime.minute;
+
+    print("Selected Start Minutes: $startMinutes, End Minutes: $endMinutes");
+
+    for (var day in convenientDays_) {
+      print("Checking availability for day: ${day.day}");
+      final availableStart = _parseTime(day.timeStart);
+      final availableEnd = _parseTime(day.timeEnd);
+
+      if (availableStart != null && availableEnd != null) {
+        final availableStartMinutes =
+            availableStart.hour * 60 + availableStart.minute;
+        final availableEndMinutes =
+            availableEnd.hour * 60 + availableEnd.minute;
+
+        print(
+            "Available Start Minutes: $availableStartMinutes, End Minutes: $availableEndMinutes");
+
+        if (startMinutes >= availableStartMinutes &&
+            endMinutes <= availableEndMinutes) {
+          print("Time is within the available range.");
+          return true; // Time is within the available range
+        }
+      }
+    }
+    print("Time is outside the available range.");
+    return false; // Time is outside the available range
+  }
+
   Future<AppointmentInsertModel> fetchAppointmentInsert() async {
     final userId = widget.user_id?.toString() ?? '';
     final targetId = _selectedUser_id?.toString() ?? '';
@@ -233,47 +334,19 @@ class _AddState extends State<Add> {
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDay!);
 
-    String formatTimeOfDay(TimeOfDay timeOfDay) {
+    String _formatTimeOfDay(TimeOfDay timeOfDay) {
+      // Convert TimeOfDay to DateTime
       final now = DateTime.now();
       final dateTime = DateTime(
           now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
-      return DateFormat('hh:mm a').format(dateTime);
+
+      // Format DateTime as hh:mm:ss A (12-hour clock with AM/PM)
+      final formatter = DateFormat('hh:mm:ss a');
+      return formatter.format(dateTime);
     }
 
-    String? formattedTimeStart;
-    String? formattedTimeEnd;
-
-    TimeStartControllers.forEach((key, timeOfDay) {
-      if (timeOfDay != null) {
-        // ตรวจสอบว่า timeOfDay ไม่ใช่ null
-        formattedTimeStart = formatTimeOfDay(timeOfDay);
-        print('Formatted time: $formattedTimeStart');
-      } else {
-        print('Time is null for key: $key');
-      }
-    });
-
-    TimeEndControllers.forEach((key, timeOfDay) {
-      if (timeOfDay != null) {
-        // ตรวจสอบว่า timeOfDay ไม่ใช่ null
-        formattedTimeEnd = formatTimeOfDay(timeOfDay);
-        print('Formatted time: $formattedTimeEnd');
-      } else {
-        print('Time is null for key: $key');
-      }
-    });
-
-    print(formattedTimeStart);
-    print(formattedTimeEnd);
-
-    // String strattimeString = "2024-05-21 $strattime";
-    // String endtimeString = "2024-05-21 $endtime";
-
-    // DateTime strattimes = DateTime.parse(strattimeString);
-    // DateTime endtimes = DateTime.parse(endtimeString);
-
-    // final time_start = DateFormat('hh:mm a').format(strattimes);
-    // final time_end = DateFormat('hh:mm a').format(endtimes);
+    final startTime = _formatTimeOfDay(selectedStartTime!);
+    final endTime = _formatTimeOfDay(selectedEndTime!);
 
     final url =
         Uri.parse('https://appt-cis.smt-online.com/api/appointment/insert');
@@ -288,8 +361,8 @@ class _AddState extends State<Add> {
       'appointments': [
         {
           'date': formattedDate,
-          'time_start': formattedTimeStart,
-          'time_end': formattedTimeEnd,
+          'time_start': startTime,
+          'time_end': endTime,
         }
       ],
       'title': title,
@@ -681,157 +754,120 @@ class _AddState extends State<Add> {
                     const SizedBox(
                       height: 5,
                     ),
-                    FutureBuilder<List<ConvenientDayModel>>(
-                      future: futureConvenientDay,
-                      builder: (context, convenientSnapshot) {
-                        if (convenientSnapshot.connectionState ==
+                    FutureBuilder<List<AppointmentCalendarModel>>(
+                      future: futureAppointmentCalendar_1,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
-                        } else if (convenientSnapshot.hasError) {
+                        } else if (snapshot.hasError) {
                           return Center(
-                            child: Text(
-                                'เกิดข้อผิดพลาด: ${convenientSnapshot.error}'),
+                            child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
                           );
-                        } else if (!convenientSnapshot.hasData) {
-                          return Center(
-                            child: Text('กรุณาเลือกอาจารย์ที่อยากนัดหมายก่อน'),
-                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('ไม่มีข้อมูล'));
                         } else {
-                          final List<ConvenientDayModel> convenientDays =
-                              convenientSnapshot.data!;
-                          return FutureBuilder<List<AppointmentCalendarModel>>(
-                            future: futureAppointmentCalendar_1,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
+                          List<AppointmentCalendarModel> appointmentCalendar =
+                              snapshot.data!;
+
+                          final formattedDate = _selectedDay != null
+                              ? DateFormat('yyyy-MM-dd').format(_selectedDay!)
+                              : '';
+
+                          DateTime? formattedDateAsDateTime = _selectedDay !=
+                                  null
+                              ? DateFormat('yyyy-MM-dd').parse(formattedDate)
+                              : null;
+
+                          final Map<String, int> dayOfWeekMap = {
+                            'Monday': 1,
+                            'Tuesday': 2,
+                            'Wednesday': 3,
+                            'Thursday': 4,
+                            'Friday': 5,
+                          };
+
+                          int? dayOfWeekNumber;
+
+                          if (formattedDateAsDateTime != null) {
+                            String dayOfWeekEnglish = DateFormat('EEEE')
+                                .format(formattedDateAsDateTime);
+                            dayOfWeekNumber =
+                                dayOfWeekMap[dayOfWeekEnglish] ?? 0;
+
+                            print(
+                                "Selected date: $formattedDateAsDateTime ($dayOfWeekEnglish - $dayOfWeekNumber)");
+                          } else {
+                            print('No date selected');
+                          }
+
+                          matchingAppointments.clear();
+
+                          if (formattedDateAsDateTime != null) {
+                            for (var appointment in appointmentCalendar) {
+                              if (appointment.date.year ==
+                                      formattedDateAsDateTime.year &&
+                                  appointment.date.month ==
+                                      formattedDateAsDateTime.month &&
+                                  appointment.date.day ==
+                                      formattedDateAsDateTime.day) {
+                                matchingAppointments.add(appointment);
+                              }
+                            }
+                          }
+
+                          return FutureBuilder<List<ConvenientDayModel>>(
+                            future: futureConvenientDay,
+                            builder: (context, convenientSnapshot) {
+                              if (convenientSnapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return Center(
                                     child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
+                              } else if (convenientSnapshot.hasError) {
                                 return Center(
-                                  child:
-                                      Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                  child: Text(
+                                      'เกิดข้อผิดพลาด: ${convenientSnapshot.error}'),
                                 );
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return Center(child: Text('ไม่มีข้อมูล'));
+                              } else if (!convenientSnapshot.hasData) {
+                                return Center(
+                                    child: Text(
+                                        'กรุณาเลือกอาจารย์ที่อยากนัดหมายก่อน'));
                               } else {
-                                List<AppointmentCalendarModel>
-                                    appointmentCalendar = snapshot.data!;
-                                List<DateTime> dates = appointmentCalendar
-                                    .map((appointment) => appointment.date)
-                                    .toList();
+                                final List<ConvenientDayModel> convenientDays =
+                                    convenientSnapshot.data!;
 
-                                // Log the dates to the console
-                                print('Appointment Dates:');
-                                dates.forEach((date) => print("date $date"));
+                                ConvenientDayModel? matchingConvenientDay =
+                                    convenientDays.firstWhereOrNull(
+                                  (day) => day.day == (dayOfWeekNumber ?? 0),
+                                );
+                                List<String> convenientTimes = [];
 
-                                // Continue with the rest of your code
-                                ConvenientDayModel? selectedConvenientDay;
-                                List<TimeOfDay> availableTimes = [];
+                                if (matchingConvenientDay != null) {
+                                  convenientTimes = [
+                                    matchingConvenientDay.timeStart,
+                                    matchingConvenientDay.timeEnd
+                                  ];
 
-                                // if (_selectedDay != null) {
-                                //   print(_selectedDay);
-                                //   DateTime selectedDateTime =
-                                //       DateTime.parse('${_selectedDay}');
-                                //   List<AppointmentCalendarModel>
-                                //       appointmentsOnSelectedDay = [];
+                                  convenientDays_.clear();
 
-                                //   appointmentCalendar.forEach((appointment) {
-                                //     DateTime appointmentDateTime =
-                                //         DateTime.parse(
-                                //             appointment.date.toString());
-
-                                //     if (isSameDay(appointmentDateTime,
-                                //         selectedDateTime)) {
-                                //       appointmentsOnSelectedDay
-                                //           .add(appointment);
-                                //     }
-                                //   });
-
-                                //   TimeOfDay startOfDay =
-                                //       TimeOfDay(hour: 8, minute: 0);
-                                //   TimeOfDay endOfDay =
-                                //       TimeOfDay(hour: 17, minute: 0);
-
-                                //   for (var time = startOfDay;
-                                //       time.hour < endOfDay.hour;
-                                //       time = TimeOfDay(
-                                //           hour: time.hour + 1, minute: 0)) {
-                                //     availableTimes.add(time);
-                                //   }
-
-                                //   appointmentsOnSelectedDay
-                                //       .forEach((appointment) {
-                                //     TimeOfDay appointmentStartTime =
-                                //         TimeOfDay.fromDateTime(DateFormat.Hms()
-                                //             .parse(appointment.timeStart));
-                                //     TimeOfDay appointmentEndTime =
-                                //         TimeOfDay.fromDateTime(DateFormat.Hms()
-                                //             .parse(appointment.timeEnd));
-
-                                //     int timeOfDayToMinutes(TimeOfDay time) {
-                                //       return time.hour * 60 + time.minute;
-                                //     }
-
-                                //     for (int i = availableTimes.length - 1;
-                                //         i >= 0;
-                                //         i--) {
-                                //       TimeOfDay availableTime =
-                                //           availableTimes[i];
-
-                                //       if (timeOfDayToMinutes(availableTime) >=
-                                //               timeOfDayToMinutes(
-                                //                   appointmentStartTime) &&
-                                //           timeOfDayToMinutes(availableTime) <
-                                //               timeOfDayToMinutes(
-                                //                   appointmentEndTime)) {
-                                //         availableTimes.removeAt(i);
-                                //       }
-                                //     }
-                                //   });
-
-                                //   availableTimes.sort((a, b) =>
-                                //       a.hour * 60 +
-                                //       a.minute -
-                                //       (b.hour * 60 + b.minute));
-                                // }
-
-                                bool isTimeWithinAvailableTimes(
-                                    TimeOfDay startTime, TimeOfDay endTime) {
-                                  int startTimeMinutes =
-                                      startTime.hour * 60 + startTime.minute;
-                                  int endTimeMinutes =
-                                      endTime.hour * 60 + endTime.minute;
-
-                                  for (var convenient in convenientDays) {
-                                    TimeOfDay availableStartTime = TimeOfDay(
-                                      hour: int.parse(
-                                          convenient.timeStart.split(':')[0]),
-                                      minute: int.parse(
-                                          convenient.timeStart.split(':')[1]),
-                                    );
-                                    TimeOfDay availableEndTime = TimeOfDay(
-                                      hour: int.parse(
-                                          convenient.timeEnd.split(':')[0]),
-                                      minute: int.parse(
-                                          convenient.timeEnd.split(':')[1]),
+                                  if (convenientTimes.length == 2) {
+                                    ConvenientDayModel convenientDay =
+                                        ConvenientDayModel(
+                                      id: widget.user_id,
+                                      userId: _selectedUser_id ?? 0,
+                                      day: dayOfWeekNumber ?? 0,
+                                      timeStart: convenientTimes[0],
+                                      timeEnd: convenientTimes[1],
+                                      createdAt:
+                                          DateTime.now().toIso8601String(),
+                                      updatedAt:
+                                          DateTime.now().toIso8601String(),
+                                      deletedAt: null,
                                     );
 
-                                    int availableStartTimeMinutes =
-                                        availableStartTime.hour * 60 +
-                                            availableStartTime.minute;
-                                    int availableEndTimeMinutes =
-                                        availableEndTime.hour * 60 +
-                                            availableEndTime.minute;
-
-                                    if (startTimeMinutes >=
-                                            availableStartTimeMinutes &&
-                                        endTimeMinutes <=
-                                            availableEndTimeMinutes) {
-                                      return true;
-                                    }
+                                    convenientDays_.add(convenientDay);
                                   }
-                                  return false;
                                 }
 
                                 return Column(
@@ -932,6 +968,35 @@ class _AddState extends State<Add> {
                                                 ),
                                               ),
                                         ],
+                                        if (matchingAppointments.isNotEmpty)
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: matchingAppointments
+                                                .map((appointment) {
+                                              String startTime =
+                                                  appointment.timeStart;
+                                              String endTime =
+                                                  appointment.timeEnd;
+
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'นัดหมายอื่น:',
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    'เริ่ม: $startTime - สิ้นสุด: $endTime',
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Divider(),
+                                                  SizedBox(height: 10),
+                                                ],
+                                              );
+                                            }).toList(),
+                                          ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -942,32 +1007,18 @@ class _AddState extends State<Add> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () async {
-                                              DateTime? selectedDay =
-                                                  _selectedDay;
-                                              if (selectedDay != null) {
-                                                TimeOfDay? selectedStartTime =
-                                                    await showTimePicker(
-                                                  context: context,
-                                                  initialTime:
-                                                      TimeStartControllers[
-                                                              selectedDay] ??
-                                                          TimeOfDay.now(),
-                                                );
-                                                if (selectedStartTime != null) {
-                                                  setState(() {
-                                                    TimeStartControllers[
-                                                            selectedDay] =
-                                                        selectedStartTime;
-                                                  });
-                                                }
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'กรุณาเลือกวันที่ก่อน'),
-                                                  ),
-                                                );
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                context: context,
+                                                initialTime:
+                                                    selectedStartTime ??
+                                                        TimeOfDay.now(),
+                                              );
+                                              if (pickedTime != null) {
+                                                setState(() {
+                                                  selectedStartTime =
+                                                      pickedTime;
+                                                });
                                               }
                                             },
                                             child: InputDecorator(
@@ -975,8 +1026,7 @@ class _AddState extends State<Add> {
                                                 labelText: 'เวลาเริ่ม',
                                               ),
                                               child: Text(
-                                                TimeStartControllers[
-                                                            _selectedDay]
+                                                selectedStartTime
                                                         ?.format(context) ??
                                                     'เลือกเวลาเริ่ม',
                                               ),
@@ -993,46 +1043,16 @@ class _AddState extends State<Add> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () async {
-                                              DateTime? selectedDay =
-                                                  _selectedDay;
-                                              if (selectedDay != null) {
-                                                TimeOfDay? selectedEndTime =
-                                                    await showTimePicker(
-                                                  context: context,
-                                                  initialTime:
-                                                      TimeEndControllers[
-                                                              selectedDay] ??
-                                                          TimeOfDay.now(),
-                                                );
-                                                if (selectedEndTime != null) {
-                                                  if (isTimeWithinAvailableTimes(
-                                                      TimeStartControllers[
-                                                          selectedDay]!,
-                                                      selectedEndTime)) {
-                                                    setState(() {
-                                                      TimeEndControllers[
-                                                              selectedDay] =
-                                                          selectedEndTime;
-                                                    });
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                            'เวลาที่เลือกอยู่นอกช่วงเวลาว่างของอาจารย์'),
-                                                      ),
-                                                    );
-                                                  }
-                                                }
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'กรุณาเลือกวันที่ก่อน'),
-                                                  ),
-                                                );
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                context: context,
+                                                initialTime: selectedEndTime ??
+                                                    TimeOfDay.now(),
+                                              );
+                                              if (pickedTime != null) {
+                                                setState(() {
+                                                  selectedEndTime = pickedTime;
+                                                });
                                               }
                                             },
                                             child: InputDecorator(
@@ -1040,7 +1060,7 @@ class _AddState extends State<Add> {
                                                 labelText: 'เวลาจบ',
                                               ),
                                               child: Text(
-                                                TimeEndControllers[_selectedDay]
+                                                selectedEndTime
                                                         ?.format(context) ??
                                                     'เลือกเวลาจบ',
                                               ),
@@ -1201,6 +1221,47 @@ class _AddState extends State<Add> {
                         child: InkWell(
                           onTap: () async {
                             if (_appointmentform.currentState!.validate()) {
+                              if (!_validateTimeRange()) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc: "กรุณาเลือกเวลาเริ่มต้นก่อนเวลาเลิก.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
+                              if (_isTimeSlotOverlapping()) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc: "เวลาเลือกทับซ้อนกับนัดหมายอื่น.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
+                              if (!_isTimeWithinAvailableRange(
+                                  selectedStartTime!, selectedEndTime!)) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc:
+                                      "เวลาเลือกอยู่นอกช่วงเวลาที่ว่างของอาจารย์.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
                               AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.question,
@@ -1223,54 +1284,41 @@ class _AddState extends State<Add> {
                                 },
                               ).show();
                             }
-//                             print('user_id: ${widget.user_id}');
-//                             print('target_id: ${_selectedUser_id}');
-//                             if (_selectedTitleIndex == 1 ||
-//                                 _selectedTitleIndex == 2) {
-//                               print('title: ${selectedTitleText}');
-//                             } else {
-//                               print('title: ${_otherTitleController.text}');
-//                             }
-//                             print(
-//                                 'title_detail: ${_detailTitleController.text}');
+                            print('user_id: ${widget.user_id}');
+                            print('target_id: ${_selectedUser_id}');
+                            if (_selectedTitleIndex == 1 ||
+                                _selectedTitleIndex == 2) {
+                              print('title: ${selectedTitleText}');
+                            } else {
+                              print('title: ${_otherTitleController.text}');
+                            }
+                            print(
+                                'title_detail: ${_detailTitleController.text}');
 
-// // ฟังก์ชั่นเพื่อฟอร์แมตเวลา
-//                             String formatTimeOfDay(TimeOfDay timeOfDay) {
-//                               final now = DateTime.now();
-//                               final dateTime = DateTime(now.year, now.month,
-//                                   now.day, timeOfDay.hour, timeOfDay.minute);
-//                               return DateFormat('hh:mm a').format(dateTime);
-//                             }
+// ฟังก์ชั่นเพื่อฟอร์แมตเวลา
+                            String _formatTimeOfDay(TimeOfDay timeOfDay) {
+                              // Convert TimeOfDay to DateTime
+                              final now = DateTime.now();
+                              final dateTime = DateTime(now.year, now.month,
+                                  now.day, timeOfDay.hour, timeOfDay.minute);
 
-// // ฟอร์แมตข้อมูลใน TimeStartControllers
-//                             TimeStartControllers.forEach((key, timeOfDay) {
-//                               if (timeOfDay != null) {
-//                                 // ตรวจสอบว่า timeOfDay ไม่ใช่ null
-//                                 final formattedTimeStart =
-//                                     formatTimeOfDay(timeOfDay);
-//                                 print('Formatted time: $formattedTimeStart');
-//                               } else {
-//                                 print('Time is null for key: $key');
-//                               }
-//                             });
+                              // Format DateTime as hh:mm:ss A (12-hour clock with AM/PM)
+                              final formatter = DateFormat('hh:mm:ss a');
+                              return formatter.format(dateTime);
+                            }
 
-//                             TimeEndControllers.forEach((key, timeOfDay) {
-//                               if (timeOfDay != null) {
-//                                 // ตรวจสอบว่า timeOfDay ไม่ใช่ null
-//                                 final formattedTimeEnd =
-//                                     formatTimeOfDay(timeOfDay);
-//                                 print('Formatted time: $formattedTimeEnd');
-//                               } else {
-//                                 print('Time is null for key: $key');
-//                               }
-//                             });
+                            final startTime =
+                                _formatTimeOfDay(selectedStartTime!);
+                            final endTime = _formatTimeOfDay(selectedEndTime!);
+                            print('startTime: ${startTime}');
+                            print('endTime: ${endTime}');
 
-//                             if (_selectedRoomIndex == 1) {
-//                               print('room: ${selectedRoomText}');
-//                             } else {
-//                               print('room: ${_RoomController.text}');
-//                             }
-//                             print('priority_level: ${status}');
+                            if (_selectedRoomIndex == 1) {
+                              print('room: ${selectedRoomText}');
+                            } else {
+                              print('room: ${_RoomController.text}');
+                            }
+                            print('priority_level: ${status}');
                           },
                           child: const Center(
                             child: Text(
@@ -1423,25 +1471,28 @@ class _AddState extends State<Add> {
                         }
                         return filteredStudents
                             .where((user) =>
-                                '${user.firstName} ${user.lastName}'
+                                '${user.firstName} ${user.lastName} ${user.studentId}'
                                     .toLowerCase()
                                     .contains(
                                       textEditingValue.text.toLowerCase(),
                                     ))
                             .map((user) =>
-                                '${user.prefix} ${user.firstName} ${user.lastName}')
+                                '${user.prefix} ${user.firstName} ${user.lastName} (${user.studentId})')
                             .toList();
                       },
                       onSelected: (String selection) {
                         final selectedStudent = filteredStudents.firstWhere(
                           (user) =>
-                              '${user.prefix} ${user.firstName} ${user.lastName}' ==
+                              '${user.prefix} ${user.firstName} ${user.lastName} (${user.studentId})' ==
                               selection,
                         );
 
                         setState(() {
                           _selectedStudent = selectedStudent;
                           _selectedUser_id = selectedStudent.id;
+
+                          futureConvenientDay =
+                              fetchConvenientDay(widget.user_id);
                         });
                       },
                       fieldViewBuilder: (BuildContext context,
@@ -1684,116 +1735,313 @@ class _AddState extends State<Add> {
                         } else {
                           List<AppointmentCalendarModel> appointmentCalendar =
                               snapshot.data!;
-                          List<DateTime> dates = appointmentCalendar
-                              .map((appointment) => appointment.date)
-                              .toList();
 
-                          // พิมพ์วันที่และเวลาของนัดหมายทั้งหมด
-                          dates.forEach((date) {
-                            print(DateFormat('dd-MM-yyyy HH:mm').format(date));
-                          });
+                          final formattedDate = _selectedDay != null
+                              ? DateFormat('yyyy-MM-dd').format(_selectedDay!)
+                              : '';
 
-                          // ตัวอย่างการ format วันที่แรก
-                          String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(dates.first);
-                          print('Formatted Date: $formattedDate');
-                          return Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: Colors.black.withOpacity(0.5)),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      spreadRadius: 2.0,
-                                      blurRadius: 5.0,
-                                      offset: const Offset(0.0, 1.0),
-                                    ),
-                                  ],
-                                ),
-                                child: TableCalendar<String>(
-                                  headerStyle: const HeaderStyle(
-                                    formatButtonVisible: false,
-                                    titleCentered: true,
-                                  ),
-                                  rowHeight: 45,
-                                  availableGestures: AvailableGestures.all,
-                                  focusedDay: DateTime.now(),
-                                  firstDay: DateTime.utc(2010, 10, 16),
-                                  lastDay: DateTime.utc(2030, 3, 14),
-                                  selectedDayPredicate: (day) =>
-                                      isSameDay(day, _selectedDay),
-                                  calendarStyle: const CalendarStyle(
-                                      outsideDaysVisible: false),
-                                  onDaySelected: (selectedDay, focusedDay) {
-                                    _onDaySelectedStudent(
-                                        selectedDay, focusedDay);
-                                  },
-                                  enabledDayPredicate: (day) {
-                                    // Check if the day is in the dates list (appointment dates)
-                                    bool isInAppointmentDates = dates
-                                        .any((date) => isSameDay(date, day));
+                          DateTime? formattedDateAsDateTime = _selectedDay !=
+                                  null
+                              ? DateFormat('yyyy-MM-dd').parse(formattedDate)
+                              : null;
 
-                                    // Check if the day is a weekend
-                                    bool isWeekend = _isWeekendStudent(
-                                      day,
-                                      DateTime.now(),
+                          final Map<String, int> dayOfWeekMap = {
+                            'Monday': 1,
+                            'Tuesday': 2,
+                            'Wednesday': 3,
+                            'Thursday': 4,
+                            'Friday': 5,
+                          };
+
+                          int? dayOfWeekNumber;
+
+                          if (formattedDateAsDateTime != null) {
+                            String dayOfWeekEnglish = DateFormat('EEEE')
+                                .format(formattedDateAsDateTime);
+                            dayOfWeekNumber =
+                                dayOfWeekMap[dayOfWeekEnglish] ?? 0;
+
+                            print(
+                                "Selected date: $formattedDateAsDateTime ($dayOfWeekEnglish - $dayOfWeekNumber)");
+                          } else {
+                            print('No date selected');
+                          }
+
+                          matchingAppointments.clear();
+
+                          if (formattedDateAsDateTime != null) {
+                            for (var appointment in appointmentCalendar) {
+                              if (appointment.date.year ==
+                                      formattedDateAsDateTime.year &&
+                                  appointment.date.month ==
+                                      formattedDateAsDateTime.month &&
+                                  appointment.date.day ==
+                                      formattedDateAsDateTime.day) {
+                                matchingAppointments.add(appointment);
+                              }
+                            }
+                          }
+                          return FutureBuilder<List<ConvenientDayModel>>(
+                            future: futureConvenientDay,
+                            builder: (context, convenientSnapshot) {
+                              if (convenientSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (convenientSnapshot.hasError) {
+                                return Center(
+                                  child: Text(
+                                      'เกิดข้อผิดพลาด: ${convenientSnapshot.error}'),
+                                );
+                              } else if (!convenientSnapshot.hasData) {
+                                return Center(
+                                    child: Text(
+                                        'กรุณาเลือกนิสิตที่อยากนัดหมายก่อน'));
+                              } else {
+                                final List<ConvenientDayModel> convenientDays =
+                                    convenientSnapshot.data!;
+
+                                ConvenientDayModel? matchingConvenientDay =
+                                    convenientDays.firstWhereOrNull(
+                                  (day) => day.day == (dayOfWeekNumber ?? 0),
+                                );
+                                List<String> convenientTimes = [];
+
+                                if (matchingConvenientDay != null) {
+                                  convenientTimes = [
+                                    matchingConvenientDay.timeStart,
+                                    matchingConvenientDay.timeEnd
+                                  ];
+
+                                  convenientDays_.clear();
+
+                                  if (convenientTimes.length == 2) {
+                                    ConvenientDayModel convenientDay =
+                                        ConvenientDayModel(
+                                      id: widget.user_id,
+                                      userId: _selectedUser_id ?? 0,
+                                      day: dayOfWeekNumber ?? 0,
+                                      timeStart: convenientTimes[0],
+                                      timeEnd: convenientTimes[1],
+                                      createdAt:
+                                          DateTime.now().toIso8601String(),
+                                      updatedAt:
+                                          DateTime.now().toIso8601String(),
+                                      deletedAt: null,
                                     );
 
-                                    // Return true if the day is not in the appointment dates list and is not a weekend
-                                    return !isInAppointmentDates && !isWeekend;
-                                  },
-                                  // enabledDayPredicate: (day) =>
-                                  //     !_isWeekendStudent(
-                                  //   day,
-                                  //   DateTime.now(),
-                                  // ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Divider(),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Text(
-                                    'ช่วงเวลา',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _buildDropdown(
-                                    strattime ?? 'เลือกเวลาเริ่ม',
-                                    _startTimes_2,
-                                    (newValue) {
-                                      setState(() {
-                                        strattime = newValue;
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    'ถึง',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  _buildDropdown(
-                                    endtime ?? 'เลือกเวลาจบ',
-                                    _endTimes_2,
-                                    (newValue) {
-                                      setState(() {
-                                        endtime = newValue;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    convenientDays_.add(convenientDay);
+                                  }
+                                }
+                                return Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.1),
+                                            spreadRadius: 2.0,
+                                            blurRadius: 5.0,
+                                            offset: const Offset(0.0, 1.0),
+                                          ),
+                                        ],
+                                      ),
+                                      child: TableCalendar<String>(
+                                        headerStyle: const HeaderStyle(
+                                          formatButtonVisible: false,
+                                          titleCentered: true,
+                                        ),
+                                        rowHeight: 45,
+                                        availableGestures:
+                                            AvailableGestures.all,
+                                        focusedDay: DateTime.now(),
+                                        firstDay: DateTime.utc(2010, 10, 16),
+                                        lastDay: DateTime.utc(2030, 3, 14),
+                                        selectedDayPredicate: (day) =>
+                                            isSameDay(day, _selectedDay),
+                                        calendarStyle: const CalendarStyle(
+                                            outsideDaysVisible: false),
+                                        onDaySelected:
+                                            (selectedDay, focusedDay) {
+                                          _onDaySelected(convenientDays,
+                                              selectedDay, focusedDay);
+                                        },
+                                        enabledDayPredicate: (day) {
+                                          bool isWeekend = _isWeekend(
+                                              appointmentCalendar,
+                                              convenientDays,
+                                              day,
+                                              DateTime.now());
+
+                                          // Return true if the day is not in the appointment dates list and is not a weekend
+                                          return !isWeekend;
+                                        },
+                                        // enabledDayPredicate: (day) =>
+                                        //     !_isWeekendStudent(
+                                        //   day,
+                                        //   DateTime.now(),
+                                        // ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Divider(),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'ช่วงเวลา',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('ช่วงเวลาว่างของอาจารย์'),
+                                          ],
+                                        ),
+                                        if (_selectedDay != null) ...[
+                                          for (var convenient in convenientDays)
+                                            if (convenient.day ==
+                                                _selectedDay!.weekday)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 20),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Text(
+                                                        'เวลา: ${convenient.timeStart}'),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 5),
+                                                      child: Text(" - "),
+                                                    ),
+                                                    Text(
+                                                        'เวลา: ${convenient.timeEnd}'),
+                                                  ],
+                                                ),
+                                              ),
+                                        ],
+                                        if (matchingAppointments.isNotEmpty)
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: matchingAppointments
+                                                .map((appointment) {
+                                              String startTime =
+                                                  appointment.timeStart;
+                                              String endTime =
+                                                  appointment.timeEnd;
+
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'นัดหมายอื่น:',
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    'เริ่ม: $startTime - สิ้นสุด: $endTime',
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Divider(),
+                                                  SizedBox(height: 10),
+                                                ],
+                                              );
+                                            }).toList(),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                context: context,
+                                                initialTime:
+                                                    selectedStartTime ??
+                                                        TimeOfDay.now(),
+                                              );
+                                              if (pickedTime != null) {
+                                                setState(() {
+                                                  selectedStartTime =
+                                                      pickedTime;
+                                                });
+                                              }
+                                            },
+                                            child: InputDecorator(
+                                              decoration: InputDecoration(
+                                                labelText: 'เวลาเริ่ม',
+                                              ),
+                                              child: Text(
+                                                selectedStartTime
+                                                        ?.format(context) ??
+                                                    'เลือกเวลาเริ่ม',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Text(
+                                            'ถึง',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              TimeOfDay? pickedTime =
+                                                  await showTimePicker(
+                                                context: context,
+                                                initialTime: selectedEndTime ??
+                                                    TimeOfDay.now(),
+                                              );
+                                              if (pickedTime != null) {
+                                                setState(() {
+                                                  selectedEndTime = pickedTime;
+                                                });
+                                              }
+                                            },
+                                            child: InputDecorator(
+                                              decoration: InputDecoration(
+                                                labelText: 'เวลาจบ',
+                                              ),
+                                              child: Text(
+                                                selectedEndTime
+                                                        ?.format(context) ??
+                                                    'เลือกเวลาจบ',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }
+                            },
                           );
                         }
                       },
@@ -1957,15 +2205,56 @@ class _AddState extends State<Add> {
                     ),
                     Center(
                       child: Container(
-                        width: 375,
-                        height: 50,
+                        width: MediaQuery.of(context).size.width * 1,
+                        height: MediaQuery.of(context).size.height * 0.06,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromARGB(255, 13, 187, 158),
+                          color: const Color.fromARGB(255, 0, 116, 211),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: InkWell(
                           onTap: () async {
                             if (_appointmentform.currentState!.validate()) {
+                              if (!_validateTimeRange()) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc: "กรุณาเลือกเวลาเริ่มต้นก่อนเวลาเลิก.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
+                              if (_isTimeSlotOverlapping()) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc: "เวลาเลือกทับซ้อนกับนัดหมายอื่น.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
+                              if (!_isTimeWithinAvailableRange(
+                                  selectedStartTime!, selectedEndTime!)) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  animType: AnimType.topSlide,
+                                  showCloseIcon: true,
+                                  title: "เวลาไม่ถูกต้อง",
+                                  desc:
+                                      "เวลาเลือกอยู่นอกช่วงเวลาที่ว่างของอาจารย์.",
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
                               AwesomeDialog(
                                 context: context,
                                 dialogType: DialogType.question,
@@ -1989,11 +2278,6 @@ class _AddState extends State<Add> {
                               ).show();
                             }
 
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => ChangePassword()));
-
                             print('user_id: ${widget.user_id}');
                             print('target_id: ${_selectedUser_id}');
                             if (_selectedTitleIndex == 1 ||
@@ -2005,8 +2289,23 @@ class _AddState extends State<Add> {
                             print(
                                 'title_detail: ${_detailTitleController.text}');
 
-                            print('strattime: $strattime');
-                            print('endtime: $endtime');
+// ฟังก์ชั่นเพื่อฟอร์แมตเวลา
+                            String _formatTimeOfDay(TimeOfDay timeOfDay) {
+                              // Convert TimeOfDay to DateTime
+                              final now = DateTime.now();
+                              final dateTime = DateTime(now.year, now.month,
+                                  now.day, timeOfDay.hour, timeOfDay.minute);
+
+                              // Format DateTime as hh:mm:ss A (12-hour clock with AM/PM)
+                              final formatter = DateFormat('hh:mm:ss a');
+                              return formatter.format(dateTime);
+                            }
+
+                            final startTime =
+                                _formatTimeOfDay(selectedStartTime!);
+                            final endTime = _formatTimeOfDay(selectedEndTime!);
+                            print('startTime: ${startTime}');
+                            print('endTime: ${endTime}');
 
                             if (_selectedRoomIndex == 1) {
                               print('room: ${selectedRoomText}');

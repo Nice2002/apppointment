@@ -12,16 +12,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '/globals.dart' as globals;
 
-class Context extends StatefulWidget {
+class Contact extends StatefulWidget {
   final int? user_id;
   final String? email;
-  const Context(this.user_id, this.email, {Key? key}) : super(key: key);
+  const Contact(this.user_id, this.email, {Key? key}) : super(key: key);
 
   @override
-  State<Context> createState() => _ContextState();
+  State<Contact> createState() => _ContextState();
 }
 
-class _ContextState extends State<Context> {
+class _ContextState extends State<Contact> {
   late Future<ContactModel?> futureContact;
 
   final _contactform = GlobalKey<FormState>();

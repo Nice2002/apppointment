@@ -375,9 +375,9 @@ class _ConvenientDayState extends State<ConvenientDay> {
                                   dialogType: DialogType.question,
                                   animType: AnimType.topSlide,
                                   showCloseIcon: true,
-                                  title: "ยืนยันการเพิ่มช่องทางการติดต่อ?",
+                                  title: "ยืนยันการเพิ่มวันเวลาที่สะดวก?",
                                   desc:
-                                      "คุณต้องการเพิ่มช่องทางการติดต่อใช่หรือไม่?",
+                                      "คุณต้องการเพิ่มวันเวลาที่สะดวกใช่หรือไม่?",
                                   btnCancelOnPress: () {},
                                   btnOkOnPress: () async {
                                     if (convenientDays.isNotEmpty) {
@@ -392,7 +392,7 @@ class _ConvenientDayState extends State<ConvenientDay> {
                                       dialogType: DialogType.success,
                                       animType: AnimType.topSlide,
                                       showCloseIcon: true,
-                                      title: "เพิ่มช่องทางการติดต่อสำเร็จ",
+                                      title: "เพิ่มวันเวลาที่สะดวก",
                                       btnOkOnPress: () {
                                         // Navigator.push(
                                         //     context,

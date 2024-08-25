@@ -60,7 +60,7 @@ class AppointmentAllModel {
   factory AppointmentAllModel.fromJson(Map<String, dynamic> json) =>
       AppointmentAllModel(
         appointmentId: json["appointment_id"],
-        userId: json["user_id"],
+        userId: json["appointment_user_id"],
         targetId: json["target_id"],
         date: DateTime.parse(json["date"]),
         timeStart: json["time_start"],
